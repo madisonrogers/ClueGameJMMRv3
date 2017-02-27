@@ -19,18 +19,24 @@ public class IntBoardTest {
 
 	@Test
 	public void testAdjacency0_0() {
-		BoardCell cell = board.getCell(0, 0);
+		BoardCell cell = new BoardCell();
+		cell.setCol(0);
+		cell.setRow(0);
+		board.calcAdjacencies();
 		Set<BoardCell> testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(1, 0)));
-		assertTrue(testList.contains(board.getCell(0, 1)));
+		assertTrue(testList.contains(board.getCell(1, 0, 0, 0)));
+		assertTrue(testList.contains(board.getCell(0, 1, 0, 0)));
 		assertEquals(2, testList.size());
 	}
 	@Test
 	public void testAdjacency3_3() {
-		BoardCell cell = board.getCell(3, 3);
+		BoardCell cell = new BoardCell();
+		cell.setCol(3);
+		cell.setRow(3);
+		board.calcAdjacencies();
 		Set<BoardCell> testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(2, 3)));
-		assertTrue(testList.contains(board.getCell(3, 2)));
+		assertTrue(testList.contains(board.getCell(2, 3, 3, 3)));
+		assertTrue(testList.contains(board.getCell(3, 2, 3, 3)));
 		assertEquals(2, testList.size());
 	}
 	@Test
