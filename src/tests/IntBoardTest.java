@@ -41,39 +41,51 @@ public class IntBoardTest {
 	}
 	@Test
 	public void testAdjacency1_3() {
-		BoardCell cell = board.getCell(1, 3);
+		BoardCell cell = new BoardCell();
+		cell.setCol(1);
+		cell.setRow(3);
+		board.calcAdjacencies();
 		Set<BoardCell> testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(0, 3)));
-		assertTrue(testList.contains(board.getCell(1, 2)));
-		assertTrue(testList.contains(board.getCell(2, 3)));
+		assertTrue(testList.contains(board.getCell(3, 0, 3, 1)));
+		assertTrue(testList.contains(board.getCell(2, 1, 3, 1)));
+		assertTrue(testList.contains(board.getCell(3, 2, 3, 1)));
 		assertEquals(3, testList.size());
 }
 	@Test
 	public void testAdjacency3_0() {
-		BoardCell cell = board.getCell(3, 0);
+		BoardCell cell = new BoardCell();
+		cell.setCol(3);
+		cell.setRow(0);
+		board.calcAdjacencies();
 		Set<BoardCell> testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(2, 0)));
-		assertTrue(testList.contains(board.getCell(3, 1)));	
+		assertTrue(testList.contains(board.getCell(0, 2, 0, 3)));
+		assertTrue(testList.contains(board.getCell(1, 3, 0, 3)));	
 		assertEquals(2, testList.size());
 	}
 	@Test
 	public void testAdjacency1_1() {
-		BoardCell cell = board.getCell(1, 1);
+		BoardCell cell = new BoardCell();
+		cell.setCol(1);
+		cell.setRow(1);
+		board.calcAdjacencies();
 		Set<BoardCell> testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(0, 1)));
-		assertTrue(testList.contains(board.getCell(1, 0)));
-		assertTrue(testList.contains(board.getCell(2, 1)));
-		assertTrue(testList.contains(board.getCell(1, 2)));
+		assertTrue(testList.contains(board.getCell(0, 1, 1, 1)));
+		assertTrue(testList.contains(board.getCell(1, 0, 1, 1)));
+		assertTrue(testList.contains(board.getCell(2, 1, 1, 1)));
+		assertTrue(testList.contains(board.getCell(1, 2, 1, 1)));
 		assertEquals(4, testList.size());
 	}
 	@Test
 	public void testAdjacency2_2() {
-		BoardCell cell = board.getCell(2, 2);
+		BoardCell cell = new BoardCell();
+		cell.setCol(2);
+		cell.setRow(2);
+		board.calcAdjacencies();		
 		Set<BoardCell> testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(1, 2)));
-		assertTrue(testList.contains(board.getCell(3, 2)));
-		assertTrue(testList.contains(board.getCell(2, 1)));
-		assertTrue(testList.contains(board.getCell(2, 3)));
+		assertTrue(testList.contains(board.getCell(1, 2, 2, 2)));
+		assertTrue(testList.contains(board.getCell(3, 2, 2, 2)));
+		assertTrue(testList.contains(board.getCell(2, 1, 2, 2)));
+		assertTrue(testList.contains(board.getCell(2, 3, 2, 2)));
 		assertEquals(4, testList.size());
 	}
 	@Test
