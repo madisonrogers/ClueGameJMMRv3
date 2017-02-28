@@ -1,0 +1,4 @@
+For the testRooms function, we tested the BedRoom, Pool, Wine Cellar, Dining Room, and Closet.
+For the FourDoorDirections function, we tested the that the foyer door opens to the right, the 
+TV Room opens to the left, the lounge opens up, and the Kitchen opens down.
+There are 14 doorways, so the testNumberOfDoorways reflects that.
