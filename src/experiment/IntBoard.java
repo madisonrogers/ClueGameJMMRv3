@@ -66,28 +66,44 @@ public void calcAdjacencies(){
 	
 }
 public void calcTargets(BoardCell p, int counter){
-	
-	for(BoardCell key: adjMatrix.keySet()) {
+
+	Set<BoardCell> temp = new HashSet<BoardCell>();
+	for(BoardCell key: adjMatrix.keySet()){
 		if ((key.getCol() == p.getCol()) && (key.getRow() == p.getRow())){
-			visited.add(p);
+			temp = adjMatrix.get(key);
 		}
-		if (counter == 1) {
-			targets.add(p);
-		}
-		else {
-			calcTargets(p, counter-1);
-		}
-		visited.remove(p);
+		
+		for(BoardCell current: temp) {
+			int j = current.getCol();
+			int i = current.getRow();
+			if(!visited.contains(getTarCell(i, j))) {
+				visited.add(current);
+				//System.out.println("visited" + visited);
+				if (counter == 1){
+					if(!targets.contains(getTarCell(i, j))) {
+						targets.add(current);
+						visited.remove(current);
+					}
+				}
+				else {
+					calcTargets(current, counter - 1);
+				}
+				visited.remove(current);
+			}
+		
+		} 
 	}
+	//targets.remove(p);
 }
 public Set<BoardCell> getTargets(BoardCell b){
-	for (BoardCell key: adjMatrix.keySet()) {
-		if ((key.getCol() == b.getCol()) && (key.getRow() == b.getRow())) {
-			return adjMatrix.get(key);
-		}
+//	System.out.println(targets);
+	for (BoardCell key: targets){
+		if ((key.getCol() == b.getCol()) && (key.getRow() == b.getRow())){
+			targets.remove(key);
+			break;
+			}
 	}
-	
-	return adjMatrix.get(b);
+	return targets;
 }
 public Set<BoardCell> getAdjList(BoardCell b){
 	for (BoardCell key: adjMatrix.keySet()){
@@ -98,7 +114,7 @@ public Set<BoardCell> getAdjList(BoardCell b){
 	return adjMatrix.get(b);
 
 }
-public BoardCell getCell(int i, int j, int x, int z){
+public BoardCell getAdjCell(int i, int j, int x, int z){
 	BoardCell b = new BoardCell();
 	b.setCol(j);
 	b.setRow(i);
@@ -115,6 +131,19 @@ public BoardCell getCell(int i, int j, int x, int z){
 				}
 			}
 		}
+	}
+	return null;
+}
+public BoardCell getTarCell(int i, int j){
+	BoardCell b = new BoardCell();
+	b.setCol(j);
+	b.setRow(i);
+	
+	for (BoardCell key: targets){
+		if ((key.getCol() == b.getCol()) && (key.getRow() == b.getRow())){
+			return key;
+			}
+		
 	}
 	return null;
 }
