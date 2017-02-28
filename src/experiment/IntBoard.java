@@ -60,8 +60,10 @@ public void calcAdjacencies(){
 			}
 			adjMatrix.put(temp, list);
 		}
-	}
-
+	}	
+	
+	
+	
 }
 public void calcTargets(BoardCell p, int counter){
 	
