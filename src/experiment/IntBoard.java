@@ -79,7 +79,13 @@ public void calcTargets(BoardCell p, int counter){
 	}
 }
 public Set<BoardCell> getTargets(BoardCell b){
-	return targets;
+	for (BoardCell key: adjMatrix.keySet()) {
+		if ((key.getCol() == b.getCol()) && (key.getRow() == b.getRow())) {
+			return adjMatrix.get(key);
+		}
+	}
+	
+	return adjMatrix.get(b);
 }
 public Set<BoardCell> getAdjList(BoardCell b){
 	for (BoardCell key: adjMatrix.keySet()){
