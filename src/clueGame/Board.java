@@ -29,15 +29,7 @@ public class Board {
 
 	public void initialize( ) throws FileNotFoundException{
 
-		/*	while(in.hasNextLine()){
-			while(in.hasNext(",")){
-				numCols++;
-			}
-			numRows++;
-			numCols++;
-		}
-		numCols = numCols/numRows;
-		 */
+	
 		try{
 			loadRoomConfig();
 			loadBoardConfig();
@@ -63,27 +55,24 @@ public class Board {
 	}
 
 	public void loadBoardConfig() throws FileNotFoundException{
-		String [][] tempBoard;
+	
 		FileReader read = new FileReader(boardConfigFile);
 		Scanner in = new Scanner(read);
 		int i = 0;
+		int j = 0;
 		while (in.hasNextLine()){
 			String str = in.nextLine();
-			String[] words = str.split(","); //maybe allocate space
-			tempBoard[i] = words;
-			i++;
+			String[] temp = str.split(","); //maybe allocate space
+			for(String s: temp){
+				board[i][j] = new BoardCell(i,j,s);
+				j++;
+			}
+			j = 0;
+			i++;		
 		}
 
-		for (int j = 0; j < tempBoard.length; j++){//rows
-			for (int k = 0; k < tempBoard[j].length; k++){//cols
-				board[j][k].setInitial(initial);
-			}
-		}
 		numRows = board.length;
 		numCols = board[0].length;
-
-
-
 		in.close();
 	}
 
@@ -100,7 +89,7 @@ public class Board {
 		roomConfigFile = legend;
 	}
 
-	public Map<Character, String> getLegend()) {
+	public Map<Character, String> getLegend() {
 
 		return null; 
 	}
@@ -114,6 +103,7 @@ public class Board {
 	}
 
 	public BoardCell getCellAt(int x, int y) {
+		return null;
 
 	}
 
