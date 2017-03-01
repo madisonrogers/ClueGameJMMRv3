@@ -22,6 +22,9 @@ public void setCol(int col) {
 	this.col = col;
 }
 
+public void setInitial(char initial) {
+	this.initial = initial;
+}
 public boolean isWalkway() {
 	return false;
 }
