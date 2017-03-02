@@ -29,7 +29,7 @@ public class CR_FileInitTests {
 	// NOTE: I made Board static because I only want to set it up one 
 	// time (using @BeforeClass), no need to do setup before each test.
 	private static Board board;
-	
+
 	@BeforeClass
 	public static void setUp() throws FileNotFoundException {
 		// Board is singleton, get the only instance
@@ -53,14 +53,14 @@ public class CR_FileInitTests {
 		assertEquals("Dining room", legend.get('D'));
 		assertEquals("Walkway", legend.get('W'));
 	}
-	
+
 	@Test
 	public void testBoardDimensions() {
 		// Ensure we have the proper number of rows and columns
 		assertEquals(NUM_ROWS, board.getNumRows());
 		assertEquals(NUM_COLUMNS, board.getNumColumns());		
 	}
-	
+
 	// Test a doorway in each direction (RIGHT/LEFT/UP/DOWN), plus 
 	// two cells that are not a doorway.
 	// These cells are white on the planning spreadsheet
@@ -86,7 +86,7 @@ public class CR_FileInitTests {
 		assertFalse(cell.isDoorway());		
 
 	}
-	
+
 	// Test that we have the correct number of doors
 	@Test
 	public void testNumberOfDoorways() 
@@ -116,6 +116,6 @@ public class CR_FileInitTests {
 		// Test the closet
 		assertEquals('X', board.getCellAt(9,13).getInitial());
 	}
-	
+
 
 }

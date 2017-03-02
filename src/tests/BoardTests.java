@@ -29,14 +29,14 @@ public class BoardTests {
 	@Test
 	public void testRooms() {
 		Map<Character, String> legend = board.getLegend();
-	
+
 		assertEquals("Bedroom", legend.get('B'));
 		assertEquals("Pool", legend.get('P'));
 		assertEquals("Wine Cellar", legend.get('C'));
 		assertEquals("Dining Room", legend.get('D'));
 		assertEquals("Closet", legend.get('X'));
 		assertEquals(LEGEND_SIZE, legend.size());
-	
+
 	}
 	@Test
 	public void testBoardDimensions() {
@@ -72,7 +72,7 @@ public class BoardTests {
 					numDoors++;
 				}
 			}
-			
+
 		}
 		Assert.assertEquals(14, numDoors);
 	}
@@ -81,12 +81,12 @@ public class BoardTests {
 		assertEquals('B', board.getCellAt(0, 0).getInitial());
 		assertEquals('P', board.getCellAt(0, 5).getInitial());
 		assertEquals('F', board.getCellAt(14, 0).getInitial());
-		
+
 		assertEquals('R', board.getCellAt(20, 19).getInitial());
 		assertEquals('T', board.getCellAt(20, 10).getInitial());
-		
+
 		assertEquals('W', board.getCellAt(16, 4).getInitial());
-		
+
 		assertEquals('X', board.getCellAt(11, 8).getInitial());
 	}
 
