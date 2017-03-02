@@ -16,14 +16,19 @@ public BoardCell(int row, int col, String str) {
 		switch (c){
 		case 'R':
 			door = DoorDirection.RIGHT;
+			break;
 		case 'L':
 			door = DoorDirection.LEFT;
+			break;
 		case 'D':
 			door = DoorDirection.DOWN;
+			break;
 		case 'U':
 			door = DoorDirection.UP;
+			break;
 	    default:
 	    	door = DoorDirection.NONE;
+	    	break;
 		}
 	}
 	initial = str.charAt(0);
@@ -72,10 +77,10 @@ public boolean isWalkway() {
 }
 public boolean isDoorway() {
 	if (door != DoorDirection.NONE){
-		return false;
+		return true;
 	}
 	else{
-		return true;
+		return false;
 	}
 }
 public boolean isRoom() { //should a door be a room?

@@ -23,18 +23,20 @@ public class BoardTests {
 	public static void setUp() throws FileNotFoundException {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt");
-		board.initialize(NUM_ROWS, NUM_COLS);
+		board.initialize();
 	}
 
 	@Test
 	public void testRooms() {
 		Map<Character, String> legend = board.getLegend();
-		assertEquals(LEGEND_SIZE, legend.size());
-		assertEquals("BedRoom", legend.get('B'));
+	
+		assertEquals("Bedroom", legend.get('B'));
 		assertEquals("Pool", legend.get('P'));
 		assertEquals("Wine Cellar", legend.get('C'));
-		assertEquals("Dining room", legend.get('D'));
+		assertEquals("Dining Room", legend.get('D'));
 		assertEquals("Closet", legend.get('X'));
+		assertEquals(LEGEND_SIZE, legend.size());
+	
 	}
 	@Test
 	public void testBoardDimensions() {
@@ -43,21 +45,21 @@ public class BoardTests {
 	}
 	@Test
 	public void testFourDoorDirections() {
-		BoardCell room = board.getCellAt(1, 15);
+		BoardCell room = board.getCellAt(15, 1);
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.RIGHT, room.getDoorDirection());
-		room = board.getCellAt(6, 17);
+		room = board.getCellAt(17, 6);
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.LEFT, room.getDoorDirection());
-		room = board.getCellAt(2, 10);
+		room = board.getCellAt(10, 2);
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.DOWN, room.getDoorDirection());
-		room = board.getCellAt(18, 10);
+		room = board.getCellAt(10, 18);
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.UP, room.getDoorDirection());
 		room = board.getCellAt(18, 18);
 		assertFalse(room.isDoorway());
-		BoardCell cell = board.getCellAt(12, 18);
+		BoardCell cell = board.getCellAt(18, 12);
 		assertFalse(cell.isDoorway());
 	}
 	@Test
@@ -70,21 +72,22 @@ public class BoardTests {
 					numDoors++;
 				}
 			}
-			Assert.assertEquals(16, numDoors);
+			
 		}
+		Assert.assertEquals(14, numDoors);
 	}
 	@Test
 	public void testRoomInitials() {
 		assertEquals('B', board.getCellAt(0, 0).getInitial());
-		assertEquals('P', board.getCellAt(5, 0).getInitial());
-		assertEquals('F', board.getCellAt(0, 14).getInitial());
+		assertEquals('P', board.getCellAt(0, 5).getInitial());
+		assertEquals('F', board.getCellAt(14, 0).getInitial());
 		
-		assertEquals('R', board.getCellAt(19, 20).getInitial());
-		assertEquals('T', board.getCellAt(10, 20).getInitial());
+		assertEquals('R', board.getCellAt(20, 19).getInitial());
+		assertEquals('T', board.getCellAt(20, 10).getInitial());
 		
-		assertEquals('W', board.getCellAt(4, 16).getInitial());
+		assertEquals('W', board.getCellAt(16, 4).getInitial());
 		
-		assertEquals('X', board.getCellAt(8, 11).getInitial());
+		assertEquals('X', board.getCellAt(11, 8).getInitial());
 	}
 
 

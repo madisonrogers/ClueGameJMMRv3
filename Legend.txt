@@ -4,7 +4,7 @@ C, Wine Cellar, Card
 D, Dining Room, Card
 K, Kitchen, Card
 F, Foyer, Card
-T, TV Room, card
+T, TV Room, Card
 L, Lounge, Card
 R, Restroom, Card
 W, Walkway, Other

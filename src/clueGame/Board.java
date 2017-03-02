@@ -10,6 +10,7 @@ public class Board {
 	private int numCols;
 	public static final int MAX_BOARD_SIZE = 50;
 	private BoardCell[][] board;
+	private BoardCell[][] tempBoard;
 	private Map<Character, String> legend;
 	private Map<BoardCell, Set<BoardCell>> adjMatrix;
 	private Set<BoardCell> targets;
@@ -21,16 +22,16 @@ public class Board {
 	// ctor is private to ensure only one can be created
 	private Board() {
 		legend = new HashMap<Character, String>();
-		
+
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
 		return theInstance;
 	}
 
-	public void initialize(int x, int y) throws FileNotFoundException{
-		board = new BoardCell[x][y];
-	
+	public void initialize(){
+		tempBoard = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
+
 		try{
 			loadRoomConfig();
 			loadBoardConfig();
@@ -38,43 +39,106 @@ public class Board {
 		catch(FileNotFoundException ex){
 			System.out.println("File not Found");
 		}
+		catch(BadConfigFormatException ex){
+			ex.getMessage();
+		}
 	}
 
-	public void loadRoomConfig() throws FileNotFoundException{ 
+	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException{ 
 		FileReader read = new FileReader(roomConfigFile);
 		Scanner in = new Scanner(read);
+		legend.clear();
 		while (in.hasNextLine()){ //maps legend
 			String str = in.nextLine();
 			String[] words = str.split(",\\s");
 			Character c = new Character(words[0].charAt(0));
 			legend.put(c, words[1]);
+			
+			if ((!words[2].equals("Card")) && (!words[2].equals("Other"))){
+
+				throw new BadConfigFormatException();
+			}
+
+
 		}
+
+
 
 
 
 		in.close();
 	}
 
-	public void loadBoardConfig() throws FileNotFoundException{
-	
+	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException{
+
 		FileReader read = new FileReader(boardConfigFile);
 		Scanner in = new Scanner(read);
 		int i = 0;
 		int j = 0;
+		int count = 0;
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		while (in.hasNextLine()){
 			String str = in.nextLine();
+			
 			String[] temp = str.split(","); //maybe allocate space
 			for(String s: temp){
-				board[i][j] = new BoardCell(i,j,s); //board needs space allocated? there is an error here
+				if (!legend.containsKey(s.charAt(0))){
+					throw new BadConfigFormatException();
+				}
+				tempBoard[i][j] = new BoardCell(i,j,s); 
+				
 				j++;
 			}
 			j = 0;
-			i++;		
+			i++;
+			
 		}
+		int row = 0;
+		int col = 0;
 
-		numRows = board.length;
-		numCols = board[0].length;
+		
+		for (BoardCell[] b: tempBoard){
+
+			row++;
+			for (BoardCell c: b){
+
+				if (c == null){
+				
+				
+					break;
+				}
+				col++;
+				
+			}
+			if (b[0] == null){
+				break;
+			}
+
+		}
+	
+	
+		
+		numRows = row - 1;
+		numCols = col/numRows;
+
+		board = new BoardCell[numRows][numCols];
+		for (int p = 0; p < numRows; p++){
+			for (int y = 0; y < numCols; y++){
+				board[p][y] = tempBoard[p][y];
+				
+				
+			}
+		}
+		
+		
+		for (int p = 0; p < numRows; p++){
+			for (int y = 0; y < numCols; y++){
+				System.out.print(board[p][y].getInitial());
+			}
+			System.out.println();
+			}
 		in.close();
+
 	}
 
 	public void calcAdjacencies() {
