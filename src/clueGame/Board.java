@@ -55,7 +55,7 @@ public class Board {
 			legend.put(c, words[1]);
 
 			if ((!words[2].equals("Card")) && (!words[2].equals("Other"))){
-				throw new BadConfigFormatException();
+				throw new BadConfigFormatException("ERROR:Legend not properly formated");
 			}
 		}
 		in.close();
@@ -76,7 +76,7 @@ public class Board {
 
 			for(String s: temp){
 				if (!legend.containsKey(s.charAt(0))){
-					throw new BadConfigFormatException();
+					throw new BadConfigFormatException("ERROR:Room not included in legend");
 				}
 				tempBoard[i][j] = new BoardCell(i,j,s); 
 				j++;
@@ -108,7 +108,7 @@ public class Board {
 			int temp1 = list.get(o) - list.get(o-1);
 			int temp2 = list.get(o+1) - list.get(o);
 			if (temp1 != temp2 ){
-				throw new BadConfigFormatException();
+				throw new BadConfigFormatException("ERROR:Board not properly formated");
 			}
 		}
 
@@ -128,10 +128,15 @@ public class Board {
 
 	}
 
-	public void CalcTargets(BoardCell cell, int pathLength) {
+	public void calcTargets(int x, int y, int pathLength) {
 
 	}
-
+	public Set<BoardCell> getAdjList(int x, int y){
+		return null;
+	}
+	public Set<BoardCell> getTargets(){
+		return targets;
+	}
 	public void setConfigFiles(String board, String legend) {
 		boardConfigFile = board;
 		roomConfigFile = legend;
