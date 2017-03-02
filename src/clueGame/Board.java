@@ -21,14 +21,15 @@ public class Board {
 	// ctor is private to ensure only one can be created
 	private Board() {
 		legend = new HashMap<Character, String>();
+		
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
 		return theInstance;
 	}
 
-	public void initialize( ) throws FileNotFoundException{
-
+	public void initialize(int x, int y) throws FileNotFoundException{
+		board = new BoardCell[x][y];
 	
 		try{
 			loadRoomConfig();
@@ -39,7 +40,7 @@ public class Board {
 		}
 	}
 
-	public void loadRoomConfig() throws FileNotFoundException{
+	public void loadRoomConfig() throws FileNotFoundException{ 
 		FileReader read = new FileReader(roomConfigFile);
 		Scanner in = new Scanner(read);
 		while (in.hasNextLine()){ //maps legend
@@ -64,7 +65,7 @@ public class Board {
 			String str = in.nextLine();
 			String[] temp = str.split(","); //maybe allocate space
 			for(String s: temp){
-				board[i][j] = new BoardCell(i,j,s);
+				board[i][j] = new BoardCell(i,j,s); //board needs space allocated? there is an error here
 				j++;
 			}
 			j = 0;
@@ -91,19 +92,19 @@ public class Board {
 
 	public Map<Character, String> getLegend() {
 
-		return null; 
+		return legend; 
 	}
 
 	public int getNumRows() {
 		return numRows;
 	}
 
-	public int getNumCols() {
+	public int getNumColumns() {
 		return numCols;
 	}
 
 	public BoardCell getCellAt(int x, int y) {
-		return null;
+		return board[x][y];
 
 	}
 

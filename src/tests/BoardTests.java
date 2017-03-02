@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 import org.junit.*;
@@ -9,6 +10,7 @@ import org.junit.*;
 import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.DoorDirection;
+import clueGame.BadConfigFormatException;
 
 
 public class BoardTests {
@@ -18,10 +20,10 @@ public class BoardTests {
 
 	private static Board board;
 	@BeforeClass
-	public static void setUp() {
+	public static void setUp() throws FileNotFoundException {
 		board = Board.getInstance();
-		board.setConfigFiles();
-		board.initialize();
+		board.setConfigFiles("ClueCSV.csv", "Legend.txt");
+		board.initialize(NUM_ROWS, NUM_COLS);
 	}
 
 	@Test
@@ -34,13 +36,13 @@ public class BoardTests {
 		assertEquals("Dining room", legend.get('D'));
 		assertEquals("Closet", legend.get('X'));
 	}
-
+	@Test
 	public void testBoardDimensions() {
 		assertEquals(NUM_ROWS, board.getNumRows());
-		assertEquals(NUM_COLS, board.getNumCols());
+		assertEquals(NUM_COLS, board.getNumColumns());
 	}
-
-	public void FourDoorDirections() {
+	@Test
+	public void testFourDoorDirections() {
 		BoardCell room = board.getCellAt(1, 15);
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.RIGHT, room.getDoorDirection());
@@ -58,11 +60,11 @@ public class BoardTests {
 		BoardCell cell = board.getCellAt(12, 18);
 		assertFalse(cell.isDoorway());
 	}
-
+	@Test
 	public void testNumberOfDoorways() {
 		int numDoors = 0;
 		for(int row = 0; row<board.getNumRows();row++) {
-			for(int col = 0; col<board.getNumCols(); col++) {
+			for(int col = 0; col<board.getNumColumns(); col++) {
 				BoardCell cell = board.getCellAt(row, col);
 				if (cell.isDoorway()) {
 					numDoors++;
@@ -71,7 +73,7 @@ public class BoardTests {
 			Assert.assertEquals(16, numDoors);
 		}
 	}
-	
+	@Test
 	public void testRoomInitials() {
 		assertEquals('B', board.getCellAt(0, 0).getInitial());
 		assertEquals('P', board.getCellAt(5, 0).getInitial());

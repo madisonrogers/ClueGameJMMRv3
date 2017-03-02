@@ -35,6 +35,12 @@ public int getRow() {
 public int getCol() {
 	return col;
 }
+public DoorDirection getDoorDirection() {
+	return door;
+}
+public char getInitial() {
+	return initial;
+}
 
 
 public void setRow(int row) {
@@ -57,21 +63,29 @@ public void setInitial(char initial) {
 
 
 public boolean isWalkway() {
-	return false;
+	if (initial == 'W'){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 public boolean isDoorway() {
-	return false;
+	if (door != DoorDirection.NONE){
+		return false;
+	}
+	else{
+		return true;
+	}
 }
-public boolean isRoom() {
-	return false;
+public boolean isRoom() { //should a door be a room?
+	if ((initial != 'W') && (initial != 'X')){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
-public BoardCell getDoorDirection() {
-	return null;
-}
 
-
-public char getInitial() {
-	return 'c';
-}
 }
