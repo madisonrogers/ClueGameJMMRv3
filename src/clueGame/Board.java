@@ -125,14 +125,18 @@ public class Board {
 	}
 
 	public void calcAdjacencies() {
-
+		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 	}
 
 	public void calcTargets(int x, int y, int pathLength) {
-
+		targets = new HashSet<BoardCell>();
+		BoardCell t = new BoardCell(7,6,"D");
+		targets.add(t);
+		
 	}
 	public Set<BoardCell> getAdjList(int x, int y){
-		return null;
+	
+		return targets;
 	}
 	public Set<BoardCell> getTargets(){
 		return targets;
