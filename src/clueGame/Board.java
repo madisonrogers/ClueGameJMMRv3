@@ -16,12 +16,17 @@ public class Board {
 	private Set<BoardCell> targets;
 	private String boardConfigFile;
 	private String roomConfigFile;
+	private Set<BoardCell> visited = new HashSet<BoardCell>();
+	private Set<BoardCell> finalTargets;
+
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
 	// ctor is private to ensure only one can be created
 	private Board() {
 		legend = new HashMap<Character, String>();
+		targets = new HashSet<BoardCell>();
+		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
@@ -29,8 +34,8 @@ public class Board {
 	}
 
 	public void initialize(){
-
-
+		targets.clear();
+	
 		try{
 			loadRoomConfig();
 			loadBoardConfig();
@@ -125,21 +130,159 @@ public class Board {
 	}
 
 	public void calcAdjacencies() {
-		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
-	}
 
-	public void calcTargets(int x, int y, int pathLength) {
-		targets = new HashSet<BoardCell>();
-		BoardCell t = new BoardCell(7,6,"D");
-		targets.add(t);
-		
+		//Set<BoardCell> list = new HashSet<BoardCell>();
+
+		BoardCell key = new BoardCell(0,0," ");
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numCols; j++) {
+				//	list.clear();
+				key = getCellAt(i, j);
+				key.getInitial();
+				System.out.println(key.getInitial());
+				Set<BoardCell> list = new HashSet<BoardCell>();
+				if (key.isRoom()){
+					adjMatrix.put(key, list);
+				}
+				if(!key.isRoom()) {
+					list.clear();
+					if ( key.isDoorway()){
+						DoorDirection door = key.getDoorDirection();
+						switch (door){
+						case RIGHT:
+							BoardCell temp2 = getCellAt(i, j+1);
+							list.add(temp2);
+							break;
+						case LEFT:
+							BoardCell temp3 = getCellAt(i, j-1);
+							list.add(temp3);
+							break;
+						case UP:
+							BoardCell temp4 = getCellAt(i-1, j);
+							list.add(temp4);
+							break;
+						case DOWN:
+							BoardCell temp5 = getCellAt(i+1, j);
+							list.add(temp5);
+							break;
+						}
+					}
+					else{
+						if((i-1) >=0) { //test up
+
+							BoardCell temp2 = getCellAt(i-1, j);
+
+							if(temp2.isWalkway() || temp2.isDoorway()){ //if walkway or doorway
+								if (!(key.isDoorway() && temp2.isDoorway())){ //if not both doorways
+									if(temp2.getDoorDirection() == DoorDirection.DOWN) {
+										list.add(temp2);
+									}
+									else if (!temp2.isDoorway()) {
+										list.add(temp2);
+									}
+								}
+							}
+						}
+						if((i+1) < numRows) { //test down
+							BoardCell temp2 = getCellAt(i+1, j);
+
+							if(temp2.isWalkway()|| temp2.isDoorway()){
+								if (!(key.isDoorway() && temp2.isDoorway())){
+									if(temp2.getDoorDirection() == DoorDirection.UP) {
+										list.add(temp2);
+									}
+									else if(!temp2.isDoorway()){
+										list.add(temp2);
+									}
+								}
+							}
+						}
+						if((j-1) >=0) {//test left
+							BoardCell temp2 = getCellAt(i, j-1);
+							if(temp2.isWalkway()|| temp2.isDoorway()){
+								if (!(key.isDoorway() && temp2.isDoorway())){
+									if(temp2.getDoorDirection() == DoorDirection.RIGHT) {
+										list.add(temp2);
+									}
+									else if (!temp2.isDoorway()) {
+										list.add(temp2);
+									}
+								}
+							}
+						}
+						if((j+1) < numCols) { // test right
+							BoardCell temp2 = getCellAt(i, j+1);
+							if(temp2.isWalkway()|| temp2.isDoorway()){
+								if (!(key.isDoorway() && temp2.isDoorway())){
+									if(temp2.getDoorDirection() == DoorDirection.LEFT) {
+										list.add(temp2);
+									}
+									else if (!temp2.isDoorway()) {
+										list.add(temp2);
+									}
+								}
+							}
+						}
+						//adjMatrix.put(key, list);
+
+
+					}
+					adjMatrix.put(key, list);
+				}
+
+			}
+		}
+		//System.out.println(cell);
 	}
-	public Set<BoardCell> getAdjList(int x, int y){
+	public void calcTargets(int x, int y, int pathLength){
+		Set<BoardCell> temp = new HashSet<BoardCell>();
+		BoardCell tempKey = new BoardCell(0,0," ");
+		tempKey = getCellAt(x,y);
+		temp = adjMatrix.get(tempKey);
 	
-		return targets;
+		BoardCell e = new BoardCell(0,0," ");
+		e = getCellAt(x,y);
+		visited.add(e);
+
+		for(BoardCell current: temp) {
+			int j = current.getCol();
+			int i = current.getRow();
+			if(!visited.contains(getCellAt(i, j))) {
+				visited.add(current);
+
+				if(current.isDoorway()) {
+					targets.add(current);
+					visited.remove(current);
+				}
+				if(pathLength == 1) {
+					if(!targets.contains(getCellAt(i, j))) {
+
+						targets.add(current);
+						visited.remove(current);
+
+					}
+				}
+				else {
+					calcTargets(current.getRow(), current.getCol(), pathLength -1);
+				}
+				visited.remove(current);
+			}
+		}
+
+
+	}
+	
+	public Set<BoardCell> getAdjList(int x, int y){
+		BoardCell temp = getCellAt(x,y);
+
+		return adjMatrix.get(temp);
 	}
 	public Set<BoardCell> getTargets(){
-		return targets;
+		finalTargets = new HashSet<BoardCell>(targets);
+		targets.clear();
+		return finalTargets;
+		
+		
 	}
 	public void setConfigFiles(String board, String legend) {
 		boardConfigFile = board;

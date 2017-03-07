@@ -85,7 +85,12 @@ public class BoardCell {
 	}
 	public boolean isRoom() { //should a door be a room?
 		if ((initial != 'W') && (initial != 'X')){
+			if (door == DoorDirection.NONE){
 			return true;
+			}
+			else {
+				return false;
+			}
 		}
 		else{
 			return false;

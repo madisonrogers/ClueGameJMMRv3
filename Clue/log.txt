@@ -1,0 +1,41 @@
+commit b0e8f723cf18d50ba5dd5790f3c6ab5013d7c44f
+Author: Benjamin Jasinski <jasinski@mines.edu>
+Date:   Mon Feb 27 20:48:24 2017 -0700
+
+    all tests pass
+
+commit 5b37aa01eade0873317ee89e30998a2f6e2b18d9
+Author: khjelmstad <khjelmstad@mymail.mines.edu>
+Date:   Mon Feb 27 18:09:10 2017 -0700
+
+    continued work on calcTargets
+
+commit f825e764bc07a345309c39f4b3a8955e3b2d14e7
+Author: Kayla Hjelmstad <khjelmstad@mines.edu>
+Date:   Sun Feb 26 18:53:42 2017 -0700
+
+    added code for target calculations, not working as of yet.
+
+commit 2693e7f3f5bc13d3262daeca73be776624e1bed9
+Author: Kayla Hjelmstad <khjelmstad@mines.edu>
+Date:   Sun Feb 26 17:50:47 2017 -0700
+
+    all Adjacency tests pass
+
+commit 0a9e4b876322e45212cdaee455ee3f80d87eab54
+Author: Benjamin Jasinski <jasinski@mines.edu>
+Date:   Sun Feb 26 17:39:25 2017 -0700
+
+    found the algorithm to solve first adj tests
+
+commit 491b204d904112359925af94f4c6709f747a1ff5
+Author: Benjamin Jasinski <jasinski@mines.edu>
+Date:   Sun Feb 26 15:26:21 2017 -0700
+
+    completed part 1
+
+commit 168af6891bed53d373e2aa5d047e5a291a577f80
+Author: bjasin <jasinski@mymail.mines.edu>
+Date:   Sun Feb 26 15:13:42 2017 -0700
+
+    Initial commit
