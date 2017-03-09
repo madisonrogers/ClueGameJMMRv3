@@ -139,7 +139,7 @@ public class Board {
 				//	list.clear();
 				key = getCellAt(i, j);
 				key.getInitial();
-				System.out.println(key.getInitial());
+				//System.out.println(key.getInitial());
 				Set<BoardCell> list = new HashSet<BoardCell>();
 				if (key.isRoom()){
 					adjMatrix.put(key, list);
