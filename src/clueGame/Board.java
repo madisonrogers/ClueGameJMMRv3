@@ -19,11 +19,13 @@ public class Board {
 	private String boardConfigFile;
 	private String roomConfigFile;
 	private String playerConfigFile;
-	private String weaponsConfigFile;
+	private String weaponConfigFile;
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private Set<BoardCell> finalTargets;
 	private ArrayList<Player> players;
-	private ArrayList<Card> deck;
+	private Set<Card> deck;
+	private ArrayList<String> weapons;
+	private ArrayList<String> rooms;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -41,6 +43,7 @@ public class Board {
 
 	public void initialize(){
 		targets.clear();
+		rooms = new ArrayList<String>();
 	
 		try{
 			loadRoomConfig();
@@ -57,7 +60,8 @@ public class Board {
 	
 	public void initializeGameplay(){
 		players = new ArrayList<Player>();
-		deck = new ArrayList<Card>();
+		deck = new HashSet<Card>();
+		weapons = new ArrayList<String>();
 		try {
 			loadPlayerConfig();
 			loadWeaponConfig();
@@ -76,6 +80,9 @@ public class Board {
 			String[] words = str.split(",\\s");
 			Character c = new Character(words[0].charAt(0));
 			legend.put(c, words[1]);
+			if (words[2].equals("Card")){
+				rooms.add(words[1]); // put room name in rooms arrayList
+			}
 			if (words[2].equals("Card")) roomHasCard.put(c, true);
 			else roomHasCard.put(c, false);
 			if ((!words[2].equals("Card")) && (!words[2].equals("Other"))){
@@ -169,12 +176,34 @@ public class Board {
 		in.close();
 	}
 	
-	private void loadWeaponConfig() {
-		// TODO Auto-generated method stub
+	private void loadWeaponConfig() throws FileNotFoundException{
+		FileReader read = new FileReader(weaponConfigFile);
+		Scanner in = new Scanner(read);
+		while (in.hasNextLine()){ // has more weapons
+			String str = in.nextLine();
+			weapons.add(str);
+		}
+		in.close();
 	}
 	
 	private void makeDeck() {
-		// TODO Auto-generated method stub
+		// make weapon cards
+		for (String weapon : weapons){
+			Card card = new Card(weapon, CardType.WEAPON);
+			deck.add(card);
+		}
+		
+		// make people cards
+		for (Player player : players){
+			Card card = new Card(player.getPlayerName(), CardType.PERSON);
+			deck.add(card);
+		}
+		
+		// make room cards
+		for (String room : rooms){
+			Card card = new Card(room, CardType.ROOM);
+			deck.add(card);
+		}
 	}
 	
 	public void calcAdjacencies() {
@@ -338,7 +367,7 @@ public class Board {
 		boardConfigFile = board;
 		roomConfigFile = legend;
 		playerConfigFile = players;
-		weaponsConfigFile = weapons;
+		weaponConfigFile = weapons;
 	}
 
 	public Map<Character, String> getLegend() {
@@ -360,7 +389,7 @@ public class Board {
 	public ArrayList<Player> getPlayers(){
 		return players;
 	}
-	public ArrayList<Card> getDeck() {
+	public Set<Card> getDeck() {
 		return deck;
 	}
 }
