@@ -12,19 +12,22 @@ public class Board {
 	private BoardCell[][] board;
 	private BoardCell[][] tempBoard;
 	private Map<Character, String> legend;
+	private Map<Character, Boolean> roomHasCard;
 	private Map<BoardCell, Set<BoardCell>> adjMatrix;
 	private Set<BoardCell> targets;
 	private String boardConfigFile;
 	private String roomConfigFile;
+	private String playerConfigFile;
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private Set<BoardCell> finalTargets;
-
+	private ArrayList<Player> players;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
 	// ctor is private to ensure only one can be created
 	private Board() {
 		legend = new HashMap<Character, String>();
+		roomHasCard = new HashMap<Character, Boolean>();
 		targets = new HashSet<BoardCell>();
 		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 	}
@@ -41,11 +44,19 @@ public class Board {
 			loadBoardConfig();
 			calcAdjacencies();
 		}
-		catch(FileNotFoundException ex){
+		catch(FileNotFoundException e){
 			System.out.println("File not Found");
 		}
-		catch(BadConfigFormatException ex){
-			ex.getMessage();
+		catch(BadConfigFormatException e){
+			e.getMessage();
+		}
+	}
+	
+	public void initializePlayers(){
+		try {
+			loadPlayerConfig();
+		} catch (FileNotFoundException e){
+			System.out.println("File not Found");
 		}
 	}
 
@@ -58,7 +69,9 @@ public class Board {
 			String[] words = str.split(",\\s");
 			Character c = new Character(words[0].charAt(0));
 			legend.put(c, words[1]);
-
+			System.out.println(words[2]);
+			if (words[2].equals("Card")) roomHasCard.put(c, true);
+			else roomHasCard.put(c, false);
 			if ((!words[2].equals("Card")) && (!words[2].equals("Other"))){
 				throw new BadConfigFormatException("ERROR:Legend not properly formated");
 			}
@@ -129,6 +142,10 @@ public class Board {
 		in.close();
 	}
 
+	public void loadPlayerConfig() throws FileNotFoundException{
+		// TODO: 
+	}
+	
 	public void calcAdjacencies() {
 
 		//Set<BoardCell> list = new HashSet<BoardCell>();
@@ -224,12 +241,9 @@ public class Board {
 							}
 						}
 						//adjMatrix.put(key, list);
-
-
 					}
 					adjMatrix.put(key, list);
 				}
-
 			}
 		}
 		//System.out.println(cell);
@@ -288,6 +302,10 @@ public class Board {
 		boardConfigFile = board;
 		roomConfigFile = legend;
 	}
+	
+	public void setPlayerConfigFile(String players) {
+		playerConfigFile = players;
+	}
 
 	public Map<Character, String> getLegend() {
 		return legend; 
@@ -305,4 +323,7 @@ public class Board {
 		return board[x][y];
 	}
 
+	public ArrayList<Player> getPlayers(){
+		return players;
+	}
 }
