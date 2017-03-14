@@ -19,9 +19,11 @@ public class Board {
 	private String boardConfigFile;
 	private String roomConfigFile;
 	private String playerConfigFile;
+	private String weaponsConfigFile;
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private Set<BoardCell> finalTargets;
 	private ArrayList<Player> players;
+	private ArrayList<Card> deck;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -53,13 +55,16 @@ public class Board {
 		}
 	}
 	
-	public void initializePlayers(){
+	public void initializeGameplay(){
 		players = new ArrayList<Player>();
+		deck = new ArrayList<Card>();
 		try {
 			loadPlayerConfig();
+			loadWeaponConfig();
 		} catch (FileNotFoundException e){
 			System.out.println("File not Found");
 		}
+		makeDeck();
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException{ 
@@ -161,8 +166,15 @@ public class Board {
 			int column = Integer.parseInt(words[3]);
 			players.add(new Player(words[0], color, row, column));
 		}
-		System.out.println(players);
 		in.close();
+	}
+	
+	private void loadWeaponConfig() {
+		// TODO Auto-generated method stub
+	}
+	
+	private void makeDeck() {
+		// TODO Auto-generated method stub
 	}
 	
 	public void calcAdjacencies() {
@@ -322,10 +334,11 @@ public class Board {
 		roomConfigFile = legend;
 	}
 	
-	public void setConfigFiles(String board, String legend, String players) {
+	public void setConfigFiles(String board, String legend, String players, String weapons) {
 		boardConfigFile = board;
 		roomConfigFile = legend;
 		playerConfigFile = players;
+		weaponsConfigFile = weapons;
 	}
 
 	public Map<Character, String> getLegend() {
@@ -346,5 +359,8 @@ public class Board {
 
 	public ArrayList<Player> getPlayers(){
 		return players;
+	}
+	public ArrayList<Card> getDeck() {
+		return deck;
 	}
 }
