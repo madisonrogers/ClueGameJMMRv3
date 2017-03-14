@@ -1,9 +1,10 @@
 package clueGame;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Field;
 import java.util.*;
-
 
 public class Board {
 	private int numRows;
@@ -53,6 +54,7 @@ public class Board {
 	}
 	
 	public void initializePlayers(){
+		players = new ArrayList<Player>();
 		try {
 			loadPlayerConfig();
 		} catch (FileNotFoundException e){
@@ -69,7 +71,6 @@ public class Board {
 			String[] words = str.split(",\\s");
 			Character c = new Character(words[0].charAt(0));
 			legend.put(c, words[1]);
-			System.out.println(words[2]);
 			if (words[2].equals("Card")) roomHasCard.put(c, true);
 			else roomHasCard.put(c, false);
 			if ((!words[2].equals("Card")) && (!words[2].equals("Other"))){
@@ -143,7 +144,25 @@ public class Board {
 	}
 
 	public void loadPlayerConfig() throws FileNotFoundException{
-		// TODO: 
+		FileReader read = new FileReader(playerConfigFile);
+		Scanner in = new Scanner(read);
+		while (in.hasNextLine()){ // has more players
+			String str = in.nextLine();
+			String[] words = str.split(",\\s");
+			//for (String i : words) System.out.println(i);
+			Color color;
+			try {
+				Field field = Class.forName("java.awt.Color").getField(words[1].trim());
+				color = (Color)field.get(null);
+			} catch (Exception e){
+				color = null; // not defined
+			}
+			int row = Integer.parseInt(words[2]);
+			int column = Integer.parseInt(words[3]);
+			players.add(new Player(words[0], color, row, column));
+		}
+		System.out.println(players);
+		in.close();
 	}
 	
 	public void calcAdjacencies() {
@@ -303,7 +322,9 @@ public class Board {
 		roomConfigFile = legend;
 	}
 	
-	public void setPlayerConfigFile(String players) {
+	public void setConfigFiles(String board, String legend, String players) {
+		boardConfigFile = board;
+		roomConfigFile = legend;
 		playerConfigFile = players;
 	}
 
