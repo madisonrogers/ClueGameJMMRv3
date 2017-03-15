@@ -23,7 +23,7 @@ public class Board {
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private Set<BoardCell> finalTargets;
 	private ArrayList<Player> players;
-	private Set<Card> deck;
+	private ArrayList<Card> deck;
 	private ArrayList<String> weapons;
 	private ArrayList<String> rooms;
 
@@ -60,7 +60,7 @@ public class Board {
 	
 	public void initializeGameplay(){
 		players = new ArrayList<Player>();
-		deck = new HashSet<Card>();
+		deck = new ArrayList<Card>();
 		weapons = new ArrayList<String>();
 		try {
 			loadPlayerConfig();
@@ -69,6 +69,7 @@ public class Board {
 			System.out.println("File not Found");
 		}
 		makeDeck();
+		dealDeck();
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException{ 
@@ -204,6 +205,24 @@ public class Board {
 			Card card = new Card(room, CardType.ROOM);
 			deck.add(card);
 		}
+	}
+	
+	private void dealDeck() {
+//		Collections.shuffle(deck);
+//		int minHandSize = Math.floorDiv(deck.size(), 3);
+//		int numExtras = deck.size() % 3;
+//		int index = 0;
+//		for (Player player : players){
+//			for (int i = 0; i < minHandSize; i++){
+//				player.addToHand(deck.get(index));
+//				index++;
+//			}
+//			if (numExtras != 0){
+//				player.addToHand(deck.get(index));
+//				index++;
+//				numExtras--;
+//			}
+//		}
 	}
 	
 	public void calcAdjacencies() {
@@ -389,7 +408,7 @@ public class Board {
 	public ArrayList<Player> getPlayers(){
 		return players;
 	}
-	public Set<Card> getDeck() {
+	public ArrayList<Card> getDeck() {
 		return deck;
 	}
 }
