@@ -172,7 +172,10 @@ public class Board {
 			}
 			int row = Integer.parseInt(words[2]);
 			int column = Integer.parseInt(words[3]);
-			players.add(new Player(words[0], color, row, column));
+			if (words[4].equalsIgnoreCase("Human")) 
+				players.add(new HumanPlayer(words[0], color, row, column));
+			else 
+				players.add(new ComputerPlayer(words[0], color, row, column));
 		}
 		in.close();
 	}
@@ -208,21 +211,21 @@ public class Board {
 	}
 	
 	private void dealDeck() {
-//		Collections.shuffle(deck);
-//		int minHandSize = Math.floorDiv(deck.size(), 3);
-//		int numExtras = deck.size() % 3;
-//		int index = 0;
-//		for (Player player : players){
-//			for (int i = 0; i < minHandSize; i++){
-//				player.addToHand(deck.get(index));
-//				index++;
-//			}
-//			if (numExtras != 0){
-//				player.addToHand(deck.get(index));
-//				index++;
-//				numExtras--;
-//			}
-//		}
+		Collections.shuffle(deck);
+		int minHandSize = Math.floorDiv(deck.size(), 3);
+		int numExtras = deck.size() % 3;
+		int index = 0;
+		for (Player player : players){
+			for (int i = 0; i < minHandSize; i++){
+				player.addToHand(deck.get(index));
+				index++;
+			}
+			if (numExtras != 0){
+				player.addToHand(deck.get(index));
+				index++;
+				numExtras--;
+			}
+		}
 	}
 	
 	public void calcAdjacencies() {
@@ -374,8 +377,6 @@ public class Board {
 		finalTargets = new HashSet<BoardCell>(targets);
 		targets.clear();
 		return finalTargets;
-		
-		
 	}
 	public void setConfigFiles(String board, String legend) {
 		boardConfigFile = board;

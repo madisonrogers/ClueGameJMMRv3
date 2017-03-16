@@ -35,6 +35,10 @@ public class Player {
 	public Color getColor() {
 		return color;
 	}
+	public void setLocation(BoardCell newLocation){
+		row = newLocation.getRow();
+		column = newLocation.getCol();
+	}
 	@Override
 	public String toString() {
 		return "Player [playerName=" + playerName + ", row=" + row + ", column=" + column + ", color=" + color + "]";
