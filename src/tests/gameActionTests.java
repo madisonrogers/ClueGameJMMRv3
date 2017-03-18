@@ -13,6 +13,7 @@ import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.ComputerPlayer;
 import clueGame.Player;
+import clueGame.Solution;
 
 public class gameActionTests {
 
@@ -49,7 +50,7 @@ public class gameActionTests {
 		
 		// test random target locations like they were never in the room
 		moveMe.setLastRoom('W');
-		assertEquals(board.getCellAt(14, 17), moveMe.selectTarget(targets));
+		assertTrue(board.getCellAt(14, 17) == moveMe.selectTarget(targets) || board.getCellAt(14, 16) == moveMe.selectTarget(targets));
 		
 		// test random target location without possible doors
 		moveMe.setLocation(board.getCellAt(14, 12));
@@ -70,12 +71,29 @@ public class gameActionTests {
 	
 	@Test
 	public void makeAccusationTest(){
-		ArrayList<Player> players = board.getPlayers();
-		ComputerPlayer detective = (ComputerPlayer) players.get(1);
-		assertTrue(detective.accuse("human", "Kitchen", "Knife")); // correct solution
-		assertFalse(detective.accuse("comp1", "Kitchen", "Knife")); // wrong person
-		assertFalse(detective.accuse("human", "Pool", "Knife")); // wrong room
-		assertFalse(detective.accuse("human", "Kitchen", "Pool noodle")); // wrong weapon
+//		ArrayList<Player> players = board.getPlayers();
+//		ComputerPlayer detective = (ComputerPlayer) players.get(1);
+		ArrayList<String> solutionList = board.getSolution();
+		Solution solution = new Solution(solutionList.get(0), solutionList.get(1), solutionList.get(2));
+		assertTrue(board.checkAccusation(solution)); // correct solution
+		
+		// wrong person
+		String solutionPerson = solution.person;
+		solution.person = "wrong";
+		assertFalse(board.checkAccusation(solution)); 
+		solution.person = solutionPerson;
+		
+		// wrong room
+		String solutionRoom = solution.room;
+		solution.person = "wrong";
+		assertFalse(board.checkAccusation(solution));
+		solution.room = solutionRoom;
+		
+		// wrong weapon
+		String solutionWeapon = solution.weapon;
+		solution.person = "wrong";
+		assertFalse(board.checkAccusation(solution));
+		solution.room = solutionWeapon;
 	}
 
 }

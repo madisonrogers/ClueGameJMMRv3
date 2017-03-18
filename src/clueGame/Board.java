@@ -22,8 +22,8 @@ public class Board {
 	private String weaponConfigFile;
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private Set<BoardCell> finalTargets;
-	private ArrayList<Player> players;
 	private ArrayList<Card> deck;
+	private ArrayList<Player> players;
 	private ArrayList<String> weapons;
 	private ArrayList<String> rooms;
 	private Solution solution;
@@ -70,7 +70,9 @@ public class Board {
 			System.out.println("File not Found");
 		}
 		makeDeck();
+		setSolution();
 		dealDeck();
+		
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException{ 
@@ -367,12 +369,47 @@ public class Board {
 		}
 	}
 	
-	public void setSolution(){
-		
+	public boolean checkAccusation(Solution accusation){
+//		System.out.println(solution);
+//		System.out.println(accusation);
+		if (solution.person.equals(accusation.person) && 
+				solution.room.equals(accusation.room) && 
+				solution.weapon.equals(accusation.weapon)) return true;
+		return false;
 	}
 	
-	public Solution getSolution() {
-		return solution;
+	public void setSolution(){
+		String randomPlayer = players.get(new Random().nextInt(players.size())).getPlayerName();
+		String randomRoom = rooms.get(new Random().nextInt(rooms.size()));
+		String randomWeapon = weapons.get(new Random().nextInt(weapons.size()));
+		solution = new Solution(randomPlayer, randomRoom, randomWeapon);
+		for (Card card : deck){
+			if (card.getCardName().equals(randomPlayer)){
+				deck.remove(card);
+				break;
+			}
+		}
+		for (Card card : deck){
+			if (card.getCardName().equals(randomRoom)){
+				deck.remove(card);
+				break;
+			}
+		}
+		for (Card card : deck){
+			if (card.getCardName().equals(randomWeapon)){
+				deck.remove(card);
+				break;
+			}
+		}
+//		System.out.println(deck);
+	}
+	
+	public ArrayList<String> getSolution() {
+		ArrayList<String> solutionList = new ArrayList<String>();
+		solutionList.add(solution.person);
+		solutionList.add(solution.room);
+		solutionList.add(solution.weapon);
+		return solutionList;
 	}
 	public Set<BoardCell> getAdjList(int x, int y){
 		BoardCell temp = getCellAt(x,y);

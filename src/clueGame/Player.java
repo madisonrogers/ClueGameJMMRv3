@@ -43,7 +43,8 @@ public class Player {
 	public String toString() {
 		return "Player [playerName=" + playerName + ", row=" + row + ", column=" + column + ", color=" + color + "]";
 	}
-	public boolean accuse(String person, String room, String weapon){
-		return false;
+	public Solution accuse(String person, String room, String weapon){
+		Solution solution = new Solution(person, room, weapon);
+		return solution;
 	}
 }
