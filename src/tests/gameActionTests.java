@@ -102,12 +102,12 @@ public class gameActionTests {
 	
 	@Test
 	public void createSuggestionTets(){
-		ArrayList<Player> players = board.getPlayers();
-		ComputerPlayer detective = (ComputerPlayer) players.get(1);
+		ArrayList<Card> players = board.getPlayerCards();
+		ArrayList<Card> weapons = board.getWeaponCards();
+		ComputerPlayer detective = (ComputerPlayer) board.getPlayers().get(1);
 		Map<Character, String> legend = board.getLegend();
 		detective.setLocation(board.getCellAt(6, 15));
-		Solution suggestion = detective.createSuggestion(board.getCellAt(6, 15), board.getPlayers(), board.getWeapons());
-		System.out.println(suggestion);
+		Solution suggestion = detective.createSuggestion(board.getCellAt(6, 15), players, weapons, legend);
 		
 		// checks that room is correct location
 		assertEquals(suggestion.room, legend.get(board.getCellAt(6, 15).getInitial()));
@@ -116,7 +116,7 @@ public class gameActionTests {
 		int differentWeapons = 0;
 		Set<String> weaponsSelected = new HashSet<String>();
 		for (int i = 0; i < 100; i++){
-			suggestion = detective.createSuggestion(board.getCellAt(6, 15), board.getPlayers(), board.getWeapons());
+			suggestion = detective.createSuggestion(board.getCellAt(6, 15), players, weapons, legend);
 			if (!weaponsSelected.contains(suggestion.weapon)){
 				differentWeapons++;
 			}
@@ -128,7 +128,7 @@ public class gameActionTests {
 				int differentPeople = 0;
 				Set<String> sneopleSelected = new HashSet<String>();
 				for (int i = 0; i < 100; i++){
-					suggestion = detective.createSuggestion(board.getCellAt(6, 15), board.getPlayers(), board.getWeapons());
+					suggestion = detective.createSuggestion(board.getCellAt(6, 15), players, weapons, legend);
 					if (!sneopleSelected.contains(suggestion.weapon)){
 						differentPeople++;
 					}
@@ -138,13 +138,13 @@ public class gameActionTests {
 		
 		// check for only one weapon
 		detective.addToSeenWeapons(new Card("knife", CardType.WEAPON));
-		suggestion = detective.createSuggestion(board.getCellAt(6, 15), board.getPlayers(), board.getWeapons());
+		suggestion = detective.createSuggestion(board.getCellAt(6, 15), players, weapons, legend);
 		assertEquals(suggestion.weapon, "pool noodle"); // last weapon left
 		
 		// check for only one person
 		detective.addToSeenPeople(new Card("human", CardType.PERSON));
 		detective.addToSeenPeople(new Card("comp1", CardType.PERSON));
-		suggestion = detective.createSuggestion(board.getCellAt(6, 15), board.getPlayers(), board.getWeapons());
+		suggestion = detective.createSuggestion(board.getCellAt(6, 15), players, weapons, legend);
 		assertEquals(suggestion.person, "comp2"); // only the last person left
 	}
 

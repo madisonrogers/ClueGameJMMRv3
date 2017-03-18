@@ -26,6 +26,9 @@ public class Board {
 	private ArrayList<Player> players;
 	private ArrayList<String> weapons;
 	private ArrayList<String> rooms;
+	private ArrayList<Card> playerCards;
+	private ArrayList<Card> weaponCards; 
+	
 	private Solution solution;
 
 	// variable used for singleton pattern
@@ -63,6 +66,8 @@ public class Board {
 		players = new ArrayList<Player>();
 		deck = new ArrayList<Card>();
 		weapons = new ArrayList<String>();
+		weaponCards = new ArrayList<Card>();
+		playerCards = new ArrayList<Card>();
 		try {
 			loadPlayerConfig();
 			loadWeaponConfig();
@@ -198,12 +203,14 @@ public class Board {
 		for (String weapon : weapons){
 			Card card = new Card(weapon, CardType.WEAPON);
 			deck.add(card);
+			weaponCards.add(card);
 		}
 		
 		// make people cards
 		for (Player player : players){
 			Card card = new Card(player.getPlayerName(), CardType.PERSON);
 			deck.add(card);
+			playerCards.add(card);
 		}
 		
 		// make room cards
@@ -455,5 +462,11 @@ public class Board {
 	}
 	public ArrayList<String> getWeapons() {
 		return weapons;
+	}
+	public ArrayList<Card> getPlayerCards() {
+		return playerCards;
+	}
+	public ArrayList<Card> getWeaponCards() {
+		return weaponCards;
 	}
 }

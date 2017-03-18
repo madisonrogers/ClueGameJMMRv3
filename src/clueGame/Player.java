@@ -8,9 +8,9 @@ public class Player {
 	private int row, column;
 	private Color color;
 	private ArrayList<Card> hand;
-	private ArrayList<Card> seenPeople;
-	private ArrayList<Card> seenRooms; // might not be necessary
-	private ArrayList<Card> seenWeapons;
+	protected ArrayList<Card> seenPeople;
+	protected ArrayList<Card> seenRooms; // might not be necessary
+	protected ArrayList<Card> seenWeapons;
 	
 	public Player(String playerName, Color color, int row, int column) {
 		super();
