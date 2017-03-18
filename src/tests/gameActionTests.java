@@ -148,4 +148,30 @@ public class gameActionTests {
 		assertEquals(suggestion.person, "comp2"); // only the last person left
 	}
 
+	@Test
+	public void DisproveSuggestionTests(){
+		ArrayList<Player> players = board.getPlayers();
+		players.get(0).clearHand();
+		players.get(0).addToHand(new Card("human", CardType.PERSON));
+		players.get(0).addToHand(new Card("pool noodle", CardType.WEAPON));
+		
+		// one matching card
+		assertEquals(players.get(0).disproveSuggestion(new Solution("human", "BOGGIE ROOM", "Chop sticks")), players.get(0).getHand().get(0));
+		
+		// more than one matching card
+		int differentCards = 0;
+		Set<Card> CardsSelected = new HashSet<Card>();
+		for (int i = 0; i < 100; i++){
+			Card temp = players.get(0).disproveSuggestion(new Solution("human", "BOGGIE ROOM", "pool noodle"));
+			if (!CardsSelected.contains(temp)){
+				differentCards++;
+			}
+			CardsSelected.add(temp);			
+		}
+		assertEquals(differentCards, 2);
+		players.get(0).disproveSuggestion(new Solution("human", "BOGGIE ROOM", "pool noodle"));
+		
+		// no matching cards
+		assertEquals(players.get(0).disproveSuggestion(new Solution("human", "BOGGIE ROOM", "Chop sticks")), null);
+	}
 }

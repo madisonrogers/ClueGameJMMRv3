@@ -23,6 +23,9 @@ public class Player {
 		seenWeapons = new ArrayList<Card>();
 		hand = new ArrayList<Card>();
 	}
+	public Card disproveSuggestion(Solution suggestion){
+		return null;
+	}
 	public void addToHand(Card card){
 		hand.add(card);
 	}
@@ -34,6 +37,9 @@ public class Player {
 	}
 	public void addToSeenWeapons(Card card){
 		seenWeapons.add(card);
+	}
+	public void clearHand(){
+		hand.clear();
 	}
 	public ArrayList<Card> getHand() {
 		return hand;
