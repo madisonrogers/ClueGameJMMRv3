@@ -370,8 +370,6 @@ public class Board {
 	}
 	
 	public boolean checkAccusation(Solution accusation){
-//		System.out.println(solution);
-//		System.out.println(accusation);
 		if (solution.person.equals(accusation.person) && 
 				solution.room.equals(accusation.room) && 
 				solution.weapon.equals(accusation.weapon)) return true;
@@ -454,5 +452,8 @@ public class Board {
 	}
 	public ArrayList<Card> getDeck() {
 		return deck;
+	}
+	public ArrayList<String> getWeapons() {
+		return weapons;
 	}
 }

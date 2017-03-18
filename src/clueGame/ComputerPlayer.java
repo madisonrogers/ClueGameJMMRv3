@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
@@ -9,7 +10,6 @@ public class ComputerPlayer extends Player {
 	public ComputerPlayer(String playerName, Color color, int row, int column) {
 		super(playerName, color, row, column);
 		lastRoom = 'W';
-		// TODO Auto-generated constructor stub
 	}
 	// smart location picker from targets
 	public BoardCell selectTarget(Set<BoardCell> targets){
@@ -28,9 +28,18 @@ public class ComputerPlayer extends Player {
 		}
 		return null;
 	}
-	public void makeAccusation(){
-
+	public Solution makeAccusation(){
+//		String randomPlayer = players.get(new Random().nextInt(players.size())).getPlayerName();
+//		String randomRoom = rooms.get(new Random().nextInt(rooms.size()));
+//		String randomWeapon = weapons.get(new Random().nextInt(weapons.size()));
+		Solution accusation = new Solution("", "", "");
+		return accusation;
 	}
+	
+	public Solution createSuggestion(BoardCell location, ArrayList<Player> players, ArrayList<String> weapons){
+		return new Solution("", "", "");
+	}
+	
 	public char getLastRoom() {
 		return lastRoom;
 	}

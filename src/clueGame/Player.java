@@ -8,6 +8,9 @@ public class Player {
 	private int row, column;
 	private Color color;
 	private ArrayList<Card> hand;
+	private ArrayList<Card> seenPeople;
+	private ArrayList<Card> seenRooms; // might not be necessary
+	private ArrayList<Card> seenWeapons;
 	
 	public Player(String playerName, Color color, int row, int column) {
 		super();
@@ -15,10 +18,22 @@ public class Player {
 		this.row = row;
 		this.column = column;
 		this.color = color;
+		seenPeople = new ArrayList<Card>();
+		seenRooms = new ArrayList<Card>();
+		seenWeapons = new ArrayList<Card>();
 		hand = new ArrayList<Card>();
 	}
 	public void addToHand(Card card){
 		hand.add(card);
+	}
+	public void addToSeenPeople(Card card){
+		seenPeople.add(card);
+	}
+	public void addToSeenRooms(Card card){
+		seenRooms.add(card);
+	}
+	public void addToSeenWeapons(Card card){
+		seenWeapons.add(card);
 	}
 	public ArrayList<Card> getHand() {
 		return hand;
