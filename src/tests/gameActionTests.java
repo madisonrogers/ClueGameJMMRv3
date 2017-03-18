@@ -69,8 +69,13 @@ public class gameActionTests {
 	}
 	
 	@Test
-	public makeAccusationTest(){
-		
+	public void makeAccusationTest(){
+		ArrayList<Player> players = board.getPlayers();
+		ComputerPlayer detective = (ComputerPlayer) players.get(1);
+		assertTrue(detective.accuse("human", "Kitchen", "Knife")); // correct solution
+		assertFalse(detective.accuse("comp1", "Kitchen", "Knife")); // wrong person
+		assertFalse(detective.accuse("human", "Pool", "Knife")); // wrong room
+		assertFalse(detective.accuse("human", "Kitchen", "Pool noodle")); // wrong weapon
 	}
 
 }

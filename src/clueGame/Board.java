@@ -26,6 +26,7 @@ public class Board {
 	private ArrayList<Card> deck;
 	private ArrayList<String> weapons;
 	private ArrayList<String> rooms;
+	private Solution solution;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -364,10 +365,15 @@ public class Board {
 				visited.remove(current);
 			}
 		}
-
-
 	}
 	
+	public void setSolution(){
+		
+	}
+	
+	public Solution getSolution() {
+		return solution;
+	}
 	public Set<BoardCell> getAdjList(int x, int y){
 		BoardCell temp = getCellAt(x,y);
 
