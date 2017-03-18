@@ -26,7 +26,7 @@ public class gameActionTests {
 	}
 	
 	@Test
-	public void SelectTargetTest() {
+	public void selectTargetTest() { // for computer players
 		// set this boy up
 		board.calcTargets(16, 16, 3);
 		Set<BoardCell> targets= board.getTargets();	
@@ -40,16 +40,16 @@ public class gameActionTests {
 		Set<BoardCell> targetsSelected = new HashSet<BoardCell>();
 		for (int i = 0; i < 100; i++){
 			BoardCell temp = moveMe.selectTarget(targets);
-			if (!targetsSelected.contains(temp));
+			if (!targetsSelected.contains(temp)){
 				nonDoorSelected++;
-			targetsSelected.add(temp);
-			
+			}
+			targetsSelected.add(temp);			
 		}
-		assertEquals(nonDoorSelected, 6);
+		assertEquals(nonDoorSelected, 8);
 		
 		// test random target locations like they were never in the room
 		moveMe.setLastRoom('W');
-		assertEquals(new BoardCell(14, 16, "L"), moveMe.selectTarget(targets));
+		assertEquals(board.getCellAt(14, 17), moveMe.selectTarget(targets));
 		
 		// test random target location without possible doors
 		moveMe.setLocation(board.getCellAt(14, 12));
@@ -60,11 +60,17 @@ public class gameActionTests {
 		targetsSelected.clear();
 		for (int i = 0; i < 100; i++){
 			BoardCell temp = moveMe.selectTarget(targets);
-			if (!targetsSelected.contains(temp));
+			if (!targetsSelected.contains(temp)){
 				selected++;
+			}
 			targetsSelected.add(temp);
 		}
 		assertEquals(selected, 6);
+	}
+	
+	@Test
+	public makeAccusationTest(){
+		
 	}
 
 }
