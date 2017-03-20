@@ -22,7 +22,7 @@ public class GameSetupTests {
 	@BeforeClass
 	public static void setUp() {
 		board = Board.getInstance();
-		board.setConfigFiles("ClueCSV.csv", "legend.txt", "ThreePlayers.txt", "Weapons.txt");
+		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
 	}

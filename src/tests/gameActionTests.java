@@ -25,7 +25,7 @@ public class gameActionTests {
 	@BeforeClass
 	public static void setUp() {
 		board = Board.getInstance();
-		board.setConfigFiles("ClueCSV.csv", "legend.txt", "ThreePlayers.txt", "Weapons.txt");
+		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
 	}
@@ -172,6 +172,6 @@ public class gameActionTests {
 		players.get(0).disproveSuggestion(new Solution("human", "BOGGIE ROOM", "pool noodle"));
 		
 		// no matching cards
-		assertEquals(players.get(0).disproveSuggestion(new Solution("human", "BOGGIE ROOM", "Chop sticks")), null);
+		assertEquals(players.get(0).disproveSuggestion(new Solution("King Phillip II", "BOGGIE ROOM", "Chop sticks")), null);
 	}
 }
