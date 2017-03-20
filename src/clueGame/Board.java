@@ -377,8 +377,29 @@ public class Board {
 	}
 	public int handleSuggestion(int accusingPlayerIndex, Solution suggestion){
 		Card disproveCard = new Card("", CardType.PERSON);
-		for (int i = 0; i < players.size(); i++){
-			if (accusingPlayerIndex == i) continue;
+ 		for (int i = 0; i < accusingPlayerIndex; i++){
+			if (players.get(i).disproveSuggestion(suggestion) != null){
+				disproveCard = players.get(i).disproveSuggestion(suggestion);
+				if (disproveCard.getType() == CardType.PERSON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenPeople(disproveCard);
+					}
+				} else if (disproveCard.getType() == CardType.WEAPON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenWeapons(disproveCard);
+					}
+				} else {
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenRooms(disproveCard);
+					}
+				}
+				return i;
+			}
+		}
+ 		for (int i = accusingPlayerIndex + 1; i < players.size(); i++){
 			if (players.get(i).disproveSuggestion(suggestion) != null){
 				disproveCard = players.get(i).disproveSuggestion(suggestion);
 				if (disproveCard.getType() == CardType.PERSON){
