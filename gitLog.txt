@@ -1,0 +1,37 @@
+* HandleSuggestionTest implemented - fails
+* DisproveSuggestionTest implemented - passes
+* DisproveSuggestionTests implemented - fails
+* CreateSuggestionTest implemented - passes
+* CreateSuggestionTest implemented - fails
+* MakeAccusationTest implemented - passes, and solution cards are taken out of the deck
+* MakeAccusationTest implemented - fails
+* SelectTargetTest implemented - passes
+* SelectTargetTest implemented - fails
+* pushed to github and tests pass
+* DealDeckTest implemented - passes
+* DealDeckTest implemented - fails
+* LoadDeckTests initialized - works
+* LoadDeckTest implemented - fails
+* LoadPeopleTest implemented - Pass
+* LoadPeopleTest implemented - fails
+* Controlled by a new master now
+* finished part 4
+* part 3 finished
+* started part 3
+* all tests pass from part 2
+* one test left for part 2
+* got it to where we could run tests at least
+* Rader told me to create the boeardcells while loading in the csv by passing in the split string to the cell constructor and using the string to determine room type and door direction.
+* filled out exception class and worked on the load methods
+* Finished writing tests for part one of ClueBoard
+*   Merge branch 'master' of https://github.com/bjasin/Clue
+|\  
+| * all tests pass
+* | commit
+|/  
+* continued work on calcTargets
+* added code for target calculations, not working as of yet.
+* all Adjacency tests pass
+* found the algorithm to solve first adj tests
+* completed part 1
+* Initial commit

@@ -376,7 +376,30 @@ public class Board {
 		}
 	}
 	public int handleSuggestion(int accusingPlayerIndex, Solution suggestion){
-		// TODO: make this work
+		Card disproveCard = new Card("", CardType.PERSON);
+		for (int i = 0; i < players.size(); i++){
+			if (accusingPlayerIndex == i) continue;
+			if (players.get(i).disproveSuggestion(suggestion) != null){
+				disproveCard = players.get(i).disproveSuggestion(suggestion);
+				if (disproveCard.getType() == CardType.PERSON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenPeople(disproveCard);
+					}
+				} else if (disproveCard.getType() == CardType.WEAPON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenWeapons(disproveCard);
+					}
+				} else {
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenRooms(disproveCard);
+					}
+				}
+				return i;
+			}
+		}
 		return -1;
 	}
 	public boolean checkAccusation(Solution accusation){
