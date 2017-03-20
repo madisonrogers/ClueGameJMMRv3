@@ -375,7 +375,10 @@ public class Board {
 			}
 		}
 	}
-	
+	public int handleSuggestion(int accusingPlayerIndex, Solution suggestion){
+		// TODO: make this work
+		return -1;
+	}
 	public boolean checkAccusation(Solution accusation){
 		if (solution.person.equals(accusation.person) && 
 				solution.room.equals(accusation.room) && 
