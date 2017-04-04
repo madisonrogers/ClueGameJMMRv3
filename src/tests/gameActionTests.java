@@ -3,11 +3,11 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,6 +27,13 @@ public class gameActionTests {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
+		board.initializeGameplay();
+	}
+	
+	@Before
+	public void clearHand(){
+		ArrayList<Player> players = board.getPlayers();
+		for (Player p : players) p.clearHand();
 		board.initializeGameplay();
 	}
 	
@@ -180,35 +187,38 @@ public class gameActionTests {
 		ArrayList<Player> players = board.getPlayers();
 		
 		// no one can disprove
-		assertEquals(board.handleSuggestion(0, new Solution("King Phillip II", "BOGGIE ROOM", "Chop sticks")), -1);
+		assertNull(board.handleSuggestion(0, new Solution("King Phillip II", "BOGGIE ROOM", "Chop sticks")));
 		
 		// only accusing player can disprove
 		Card card = players.get(0).getHand().get(0);
 		if (card.getType() == CardType.PERSON){
-			assertEquals(board.handleSuggestion(0, new Solution(card.getCardName(), "BOGGIE ROOM", "Chop sticks")), -1);
+			for (Player p : players){
+			System.out.println(p.getHand());
+			}
+			assertNull(board.handleSuggestion(0, new Solution(card.getCardName(), "BOGGIE ROOM", "Chop sticks")));
 		} else if (card.getType() == CardType.ROOM){
-			assertEquals(board.handleSuggestion(0, new Solution("King Phillip II", card.getCardName(), "Chop sticks")), -1);
-		} else assertEquals(board.handleSuggestion(0, new Solution("King Phillip II", "BOGGIE ROOM", card.getCardName())), -1);
+			assertNull(board.handleSuggestion(0, new Solution("King Phillip II", card.getCardName(), "Chop sticks")));
+		} else assertNull(board.handleSuggestion(0, new Solution("King Phillip II", "BOGGIE ROOM", card.getCardName())));
 		
 		// Only human can disprove
-		int humanIndex = 0, compIndex = 0;
-		for (int i = 0; i < players.size(); i++){
-			if (players.get(i).getPlayerName().equals("human")) humanIndex = i;
-			if (players.get(i).getPlayerName().equals("comp1")) compIndex = i;
-		}
+		int humanIndex = 0, compIndex = 1;
+//		for (int i = 0; i < players.size(); i++){
+//			if (players.get(i).getPlayerName().equals("human")) humanIndex = i;
+//			if (players.get(i).getPlayerName().equals("comp1")) compIndex = i;
+//		}
 		card = players.get(humanIndex).getHand().get(0);
 		if (card.getType() == CardType.PERSON){
-			assertEquals(board.handleSuggestion(compIndex, new Solution(card.getCardName(), "BOGGIE ROOM", "Chop sticks")), humanIndex);
+			assertEquals(board.handleSuggestion(compIndex, new Solution(card.getCardName(), "BOGGIE ROOM", "Chop sticks")), card);
 		} else if (card.getType() == CardType.ROOM){
-			assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II", card.getCardName(), "Chop sticks")), humanIndex);
-		} else assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II", "BOGGIE ROOM", card.getCardName())), humanIndex);
+			assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II", card.getCardName(), "Chop sticks")), card);
+		} else assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II", "BOGGIE ROOM", card.getCardName())), card);
 		
 		// Only human can disprove, but human is accuser
 		if (card.getType() == CardType.PERSON){
-			assertEquals(board.handleSuggestion(humanIndex, new Solution(card.getCardName(), "BOGGIE ROOM", "Chop sticks")), -1);
+			assertNull(board.handleSuggestion(humanIndex, new Solution(card.getCardName(), "BOGGIE ROOM", "Chop sticks")));
 		} else if (card.getType() == CardType.ROOM){
-			assertEquals(board.handleSuggestion(humanIndex, new Solution("King Phillip II", card.getCardName(), "Chop sticks")), -1);
-		} else assertEquals(board.handleSuggestion(humanIndex, new Solution("King Phillip II", "BOGGIE ROOM", card.getCardName())), -1);
+			assertNull(board.handleSuggestion(humanIndex, new Solution("King Phillip II", card.getCardName(), "Chop sticks")));
+		} else assertNull(board.handleSuggestion(humanIndex, new Solution("King Phillip II", "BOGGIE ROOM", card.getCardName())));
 		
 		// two players can disprove, but the first returns 
 		card = players.get(0).getHand().get(0);
@@ -222,17 +232,17 @@ public class gameActionTests {
 			}
 		}
 		if (card.getType() == CardType.PERSON && card2.getType() == CardType.ROOM){
-			assertEquals(board.handleSuggestion(compIndex, new Solution(card.getCardName(), card2.getCardName(), "Chop sticks")), 0);
+			assertEquals(board.handleSuggestion(compIndex, new Solution(card.getCardName(), card2.getCardName(), "Chop sticks")), card);
 		} else if (card.getType() == CardType.PERSON && card2.getType() == CardType.WEAPON){
-			assertEquals(board.handleSuggestion(compIndex, new Solution(card.getCardName(), "BOGGIE ROOM" , card2.getCardName())), 0);
+			assertEquals(board.handleSuggestion(compIndex, new Solution(card.getCardName(), "BOGGIE ROOM" , card2.getCardName())), card);
 		} else if (card.getType() == CardType.ROOM && card2.getType() == CardType.PERSON){
-			assertEquals(board.handleSuggestion(compIndex, new Solution(card2.getCardName(), card.getCardName(), "Chop sticks")), 0);
+			assertEquals(board.handleSuggestion(compIndex, new Solution(card2.getCardName(), card.getCardName(), "Chop sticks")), card);
 		} else if (card.getType() == CardType.ROOM && card2.getType() == CardType.WEAPON){
-			assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II" , card.getCardName() , card2.getCardName())), 0);
+			assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II" , card.getCardName() , card2.getCardName())), card);
 		} else if (card.getType() == CardType.WEAPON && card2.getType() == CardType.PERSON){
-			assertEquals(board.handleSuggestion(compIndex, new Solution(card2.getCardName(), "BOGGIE ROOM" , card.getCardName())), 0);
+			assertEquals(board.handleSuggestion(compIndex, new Solution(card2.getCardName(), "BOGGIE ROOM" , card.getCardName())), card);
 		} else {
-			assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II", card2.getCardName() , card.getCardName())), 0);
+			assertEquals(board.handleSuggestion(compIndex, new Solution("King Phillip II", card2.getCardName() , card.getCardName())), card);
 		}
 	}
 }

@@ -27,11 +27,14 @@ public class Player {
 	public Card disproveSuggestion(Solution suggestion){
 		ArrayList<Card> similarCards = new ArrayList<Card>();
 		for (Card card : hand){
-			if (suggestion.person == card.getCardName()) similarCards.add(card);
-			if (suggestion.room == card.getCardName()) similarCards.add(card);
-			if (suggestion.weapon == card.getCardName()) similarCards.add(card);
+			if (suggestion.person.equals(card.getCardName())) similarCards.add(card);
+			if (suggestion.room.equals(card.getCardName())) similarCards.add(card);
+			if (suggestion.weapon.equals(card.getCardName())) similarCards.add(card);
 		}
-		if (similarCards.size() != 0) return similarCards.get(new Random().nextInt(similarCards.size()));
+		if (similarCards.size() != 0){
+			Card returnMe = similarCards.get(new Random().nextInt(similarCards.size()));
+			return returnMe;
+		}
 		return null;
 	}
 	public void addToHand(Card card){

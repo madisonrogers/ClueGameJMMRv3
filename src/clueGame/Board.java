@@ -222,19 +222,18 @@ public class Board {
 
 	private void dealDeck() {
 		Collections.shuffle(deck);
-		int minHandSize = Math.floorDiv(deck.size(), 3);
-		int numExtras = deck.size() % 3;
+		System.out.println(deck);
+//		int minHandSize = Math.floorDiv(deck.size(), 3);
+//		int numExtras = deck.size() % 3;
 		int index = 0;
-		for (Player player : players){
-			for (int i = 0; i < minHandSize; i++){
-				player.addToHand(deck.get(index));
+		for (Card card : deck){
+			System.out.println();
+			players.get(index).addToHand(card);
+			if (index != players.size()-1){
 				index++;
-			}
-			if (numExtras != 0){
-				player.addToHand(deck.get(index));
-				index++;
-				numExtras--;
-			}
+			} else {
+				index = 0;
+			}			
 		}
 	}
 
@@ -423,7 +422,7 @@ public class Board {
 		}
 		return -1;
 	}*/
-	public Card handleSuggestion(Solution suggestion, int indexOfPlayer) {
+	public Card handleSuggestion(int indexOfPlayer, Solution suggestion) {
 		// creates new list of players in the correct order to play. Starting witht he current player up to one before the current player
 		// for example, current player = 2, 3,4,5,0,1
 		ArrayList<Player> playersInOrder = new ArrayList<>();
@@ -434,13 +433,15 @@ public class Board {
 			playersInOrder.add(players.get(i));
 		}
 
-		for(Player p : playersInOrder) {
-			for(Card c : p.getHand()) {
-				if(!c.getCardName().equals(null))
-				{
-					return c;
-				}
+		//System.out.println(playersInOrder);
+
+		for(int i = 0; i < playersInOrder.size(); i++) {
+			Player p = playersInOrder.get(i);
+
+			if (null != p.disproveSuggestion(suggestion)){
+				return p.disproveSuggestion(suggestion);
 			}
+
 		}
 		return null;
 	}
