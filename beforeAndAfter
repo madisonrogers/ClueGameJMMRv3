@@ -1,0 +1,76 @@
+The most significant change was simplifying the handleSuggestion function in the Board class. We changed the function from returning an int to retun a card.
+
+This is the before code:
+public int handleSuggestion(int accusingPlayerIndex, Solution suggestion){
+		Card disproveCard = new Card("", CardType.PERSON);
+ 		for (int i = 0; i < accusingPlayerIndex; i++){
+			if (players.get(i).disproveSuggestion(suggestion) != null){
+				disproveCard = players.get(i).disproveSuggestion(suggestion);
+				if (disproveCard.getType() == CardType.PERSON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenPeople(disproveCard);
+					}
+				} else if (disproveCard.getType() == CardType.WEAPON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenWeapons(disproveCard);
+					}
+				} else {
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenRooms(disproveCard);
+					}
+				}
+				return i;
+			}
+		}
+ 		for (int i = accusingPlayerIndex + 1; i < players.size(); i++){
+			if (players.get(i).disproveSuggestion(suggestion) != null){
+				disproveCard = players.get(i).disproveSuggestion(suggestion);
+				if (disproveCard.getType() == CardType.PERSON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenPeople(disproveCard);
+					}
+				} else if (disproveCard.getType() == CardType.WEAPON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenWeapons(disproveCard);
+					}
+				} else {
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenRooms(disproveCard);
+					}
+				}
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+This is the refactored code:
+	public Card handleSuggestion(int indexOfPlayer, Solution suggestion) {
+		// creates new list of players in the correct order to play. Starting witht he current player up to one before the current player
+		// for example, current player = 2, 3,4,5,0,1
+		ArrayList<Player> playersInOrder = new ArrayList<>();
+		for (int i = indexOfPlayer+1; i < players.size(); i++) {
+			playersInOrder.add(players.get(i));
+		}
+		for (int i = 0; i < indexOfPlayer; i++) {
+			playersInOrder.add(players.get(i));
+		}
+
+		//System.out.println(playersInOrder);
+
+		for(int i = 0; i < playersInOrder.size(); i++) {
+			Player p = playersInOrder.get(i);
+
+			if (null != p.disproveSuggestion(suggestion)){
+				return p.disproveSuggestion(suggestion);
+			}
+
+		}
+		return null;
+	}
