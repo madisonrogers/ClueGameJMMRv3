@@ -28,7 +28,7 @@ public class Board {
 	private ArrayList<String> rooms;
 	private ArrayList<Card> playerCards;
 	private ArrayList<Card> weaponCards; 
-	
+
 	private Solution solution;
 
 	// variable used for singleton pattern
@@ -48,7 +48,7 @@ public class Board {
 	public void initialize(){
 		targets.clear();
 		rooms = new ArrayList<String>();
-	
+
 		try{
 			loadRoomConfig();
 			loadBoardConfig();
@@ -61,7 +61,7 @@ public class Board {
 			e.getMessage();
 		}
 	}
-	
+
 	public void initializeGameplay(){
 		players = new ArrayList<Player>();
 		deck = new ArrayList<Card>();
@@ -77,7 +77,7 @@ public class Board {
 		makeDeck();
 		setSolution();
 		dealDeck();
-		
+
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException{ 
@@ -187,7 +187,7 @@ public class Board {
 		}
 		in.close();
 	}
-	
+
 	private void loadWeaponConfig() throws FileNotFoundException{
 		FileReader read = new FileReader(weaponConfigFile);
 		Scanner in = new Scanner(read);
@@ -197,7 +197,7 @@ public class Board {
 		}
 		in.close();
 	}
-	
+
 	private void makeDeck() {
 		// make weapon cards
 		for (String weapon : weapons){
@@ -205,21 +205,21 @@ public class Board {
 			deck.add(card);
 			weaponCards.add(card);
 		}
-		
+
 		// make people cards
 		for (Player player : players){
 			Card card = new Card(player.getPlayerName(), CardType.PERSON);
 			deck.add(card);
 			playerCards.add(card);
 		}
-		
+
 		// make room cards
 		for (String room : rooms){
 			Card card = new Card(room, CardType.ROOM);
 			deck.add(card);
 		}
 	}
-	
+
 	private void dealDeck() {
 		Collections.shuffle(deck);
 		int minHandSize = Math.floorDiv(deck.size(), 3);
@@ -237,7 +237,7 @@ public class Board {
 			}
 		}
 	}
-	
+
 	public void calcAdjacencies() {
 
 		//Set<BoardCell> list = new HashSet<BoardCell>();
@@ -345,7 +345,7 @@ public class Board {
 		BoardCell tempKey = new BoardCell(0,0," ");
 		tempKey = getCellAt(x,y);
 		temp = adjMatrix.get(tempKey);
-	
+
 		BoardCell e = new BoardCell(0,0," ");
 		e = getCellAt(x,y);
 		visited.add(e);
@@ -375,7 +375,7 @@ public class Board {
 			}
 		}
 	}
-	public int handleSuggestion(int accusingPlayerIndex, Solution suggestion){
+	/*public int handleSuggestion(int accusingPlayerIndex, Solution suggestion){
 		Card disproveCard = new Card("", CardType.PERSON);
  		for (int i = 0; i < accusingPlayerIndex; i++){
 			if (players.get(i).disproveSuggestion(suggestion) != null){
@@ -422,6 +422,27 @@ public class Board {
 			}
 		}
 		return -1;
+	}*/
+	public Card handleSuggestion(Solution suggestion, int indexOfPlayer) {
+		// creates new list of players in the correct order to play. Starting witht he current player up to one before the current player
+		// for example, current player = 2, 3,4,5,0,1
+		ArrayList<Player> playersInOrder = new ArrayList<>();
+		for (int i = indexOfPlayer+1; i < players.size(); i++) {
+			playersInOrder.add(players.get(i));
+		}
+		for (int i = 0; i < indexOfPlayer; i++) {
+			playersInOrder.add(players.get(i));
+		}
+
+		for(Player p : playersInOrder) {
+			for(Card c : p.getHand()) {
+				if(!c.getCardName().equals(null))
+				{
+					return c;
+				}
+			}
+		}
+		return null;
 	}
 	public boolean checkAccusation(Solution accusation){
 		if (solution.person.equals(accusation.person) && 
@@ -429,7 +450,7 @@ public class Board {
 				solution.weapon.equals(accusation.weapon)) return true;
 		return false;
 	}
-	
+
 	public void setSolution(){
 		String randomPlayer = players.get(new Random().nextInt(players.size())).getPlayerName();
 		String randomRoom = rooms.get(new Random().nextInt(rooms.size()));
@@ -453,9 +474,9 @@ public class Board {
 				break;
 			}
 		}
-//		System.out.println(deck);
+		//		System.out.println(deck);
 	}
-	
+
 	public ArrayList<String> getSolution() {
 		ArrayList<String> solutionList = new ArrayList<String>();
 		solutionList.add(solution.person);
@@ -477,7 +498,7 @@ public class Board {
 		boardConfigFile = board;
 		roomConfigFile = legend;
 	}
-	
+
 	public void setConfigFiles(String board, String legend, String players, String weapons) {
 		boardConfigFile = board;
 		roomConfigFile = legend;
