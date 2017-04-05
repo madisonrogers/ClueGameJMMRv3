@@ -7,11 +7,14 @@ import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
-	private char lastRoom;
+	// keep track of the computer player's last visited room to make movement smart
+	private char lastRoom; 
+	
 	public ComputerPlayer(String playerName, Color color, int row, int column) {
 		super(playerName, color, row, column);
 		lastRoom = 'W';
 	}
+	
 	// smart location picker from targets
 	public BoardCell selectTarget(Set<BoardCell> targets){
 		for (BoardCell cell : targets){
@@ -19,7 +22,6 @@ public class ComputerPlayer extends Player {
 				return cell;
 			}
 		}
-
 		int random = new Random().nextInt(targets.size());
 		int i = 0;
 		for (BoardCell cell : targets){
@@ -29,14 +31,15 @@ public class ComputerPlayer extends Player {
 		}
 		return null;
 	}
+	
+	// this should override the player accusation method
 	public Solution makeAccusation(){
-		//		String randomPlayer = players.get(new Random().nextInt(players.size())).getPlayerName();
-		//		String randomRoom = rooms.get(new Random().nextInt(rooms.size()));
-		//		String randomWeapon = weapons.get(new Random().nextInt(weapons.size()));
+		// TODO finish this function so it creates correct accusations
 		Solution accusation = new Solution("", "", "");
 		return accusation;
 	}
 
+	// smart suggestion creator
 	public Solution createSuggestion(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend){
 		ArrayList<Card> validSneople = new ArrayList<Card>(players);
 		ArrayList<Card> validWeapons = new ArrayList<Card>(weapons); 
@@ -57,8 +60,6 @@ public class ComputerPlayer extends Player {
 				}
 			}
 		}
-		//		System.out.println(seenWeapons);
-		//		System.out.println(validWeapons);
 		return new Solution(validSneople.get(new Random().nextInt(validSneople.size())).getCardName(),
 				legend.get(location.getInitial()), 
 				validWeapons.get(new Random().nextInt(validWeapons.size())).getCardName());
@@ -67,6 +68,7 @@ public class ComputerPlayer extends Player {
 	public char getLastRoom() {
 		return lastRoom;
 	}
+	
 	public void setLastRoom(char lastRoom) {
 		this.lastRoom = lastRoom;
 	}

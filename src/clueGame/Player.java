@@ -43,7 +43,7 @@ public class Player {
 		return null;
 	}
 	
-	// makes a dumb accusation
+	// makes a dumb accusation (for testing purposes)
 	public Solution accuse(String person, String room, String weapon){
 		Solution solution = new Solution(person, room, weapon);
 		return solution;

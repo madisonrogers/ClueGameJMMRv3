@@ -9,4 +9,6 @@ public class HumanPlayer extends Player {
 		// TODO Auto-generated constructor stub
 	}
 	
+	// TODO: add some functionality with the human player
+	
 }
