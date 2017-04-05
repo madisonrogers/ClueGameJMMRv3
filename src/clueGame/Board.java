@@ -7,32 +7,41 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class Board {
+	public static final int MAX_BOARD_SIZE = 50;
+	
 	private int numRows;
 	private int numCols;
-	public static final int MAX_BOARD_SIZE = 50;
 	private BoardCell[][] board;
-	private BoardCell[][] tempBoard;
+	
 	private Map<Character, String> legend;
 	private Map<Character, Boolean> roomHasCard;
 	private Map<BoardCell, Set<BoardCell>> adjMatrix;
+	
 	private Set<BoardCell> targets;
+	private Set<BoardCell> visited = new HashSet<BoardCell>();
+	private Set<BoardCell> finalTargets;
+	
 	private String boardConfigFile;
 	private String roomConfigFile;
 	private String playerConfigFile;
 	private String weaponConfigFile;
-	private Set<BoardCell> visited = new HashSet<BoardCell>();
-	private Set<BoardCell> finalTargets;
+	
+	
 	private ArrayList<Card> deck;
 	private ArrayList<Player> players;
 	private ArrayList<String> weapons;
 	private ArrayList<String> rooms;
+	
+	private Solution solution;
+	
+	// for testing purposes
 	private ArrayList<Card> playerCards;
 	private ArrayList<Card> weaponCards; 
 
-	private Solution solution;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
+	
 	// ctor is private to ensure only one can be created
 	private Board() {
 		legend = new HashMap<Character, String>();
@@ -40,6 +49,7 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 	}
+	
 	// this method returns the only Board
 	public static Board getInstance() {
 		return theInstance;
@@ -62,6 +72,7 @@ public class Board {
 		}
 	}
 
+	// needed to be seperated for tests to pass
 	public void initializeGameplay(){
 		players = new ArrayList<Player>();
 		deck = new ArrayList<Card>();
@@ -102,18 +113,18 @@ public class Board {
 	}
 
 	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException{
-		tempBoard = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
+		BoardCell[][] tempBoard = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 		FileReader read = new FileReader(boardConfigFile);
 		Scanner in = new Scanner(read);
 		int i = 0;
 		int j = 0;
 		int count = 0;
 		ArrayList<Integer> list = new ArrayList<Integer>();
+		
 		while (in.hasNextLine()){
 			String str = in.nextLine();
-
 			String[] temp = str.split(","); 
-
+			
 			for(String s: temp){
 				if (!legend.containsKey(s.charAt(0))){
 					throw new BadConfigFormatException("ERROR:Room not included in legend");
@@ -123,8 +134,8 @@ public class Board {
 			}
 			j = 0;
 			i++;
-
 		}
+		
 		int row = 0;
 		int col = 0;
 		int tempC = 0;
@@ -144,6 +155,7 @@ public class Board {
 				break;
 			}
 		}
+		
 		for (int o = 1; o < list.size() -2 ; o++){
 			int temp1 = list.get(o) - list.get(o-1);
 			int temp2 = list.get(o+1) - list.get(o);
@@ -154,19 +166,22 @@ public class Board {
 
 		numRows = row - 1;
 		numCols = col/numRows;
-
 		board = new BoardCell[numRows][numCols];
+		
 		for (int p = 0; p < numRows; p++){
 			for (int y = 0; y < numCols; y++){
 				board[p][y] = tempBoard[p][y];
 			}
 		}
+		
+		// close scanner
 		in.close();
 	}
 
 	public void loadPlayerConfig() throws FileNotFoundException{
 		FileReader read = new FileReader(playerConfigFile);
 		Scanner in = new Scanner(read);
+		
 		while (in.hasNextLine()){ // has more players
 			String str = in.nextLine();
 			String[] words = str.split(",\\s");
@@ -185,16 +200,21 @@ public class Board {
 			else 
 				players.add(new ComputerPlayer(words[0], color, row, column));
 		}
+		
+		// close scanner
 		in.close();
 	}
 
 	private void loadWeaponConfig() throws FileNotFoundException{
 		FileReader read = new FileReader(weaponConfigFile);
 		Scanner in = new Scanner(read);
+		
 		while (in.hasNextLine()){ // has more weapons
 			String str = in.nextLine();
 			weapons.add(str);
 		}
+		
+		// close scanner
 		in.close();
 	}
 
@@ -224,6 +244,7 @@ public class Board {
 		Collections.shuffle(deck);
 		System.out.println(deck);
 		int index = 0;
+		
 		for (Card card : deck){
 			System.out.println();
 			players.get(index).addToHand(card);
@@ -236,16 +257,12 @@ public class Board {
 	}
 
 	public void calcAdjacencies() {
-
-		//Set<BoardCell> list = new HashSet<BoardCell>();
-
 		BoardCell key = new BoardCell(0,0," ");
+		
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numCols; j++) {
-				//	list.clear();
 				key = getCellAt(i, j);
 				key.getInitial();
-				//System.out.println(key.getInitial());
 				Set<BoardCell> list = new HashSet<BoardCell>();
 				if (key.isRoom()){
 					adjMatrix.put(key, list);
@@ -329,14 +346,13 @@ public class Board {
 								}
 							}
 						}
-						//adjMatrix.put(key, list);
 					}
 					adjMatrix.put(key, list);
 				}
 			}
 		}
-		//System.out.println(cell);
 	}
+	
 	public void calcTargets(int x, int y, int pathLength){
 		Set<BoardCell> temp = new HashSet<BoardCell>();
 		BoardCell tempKey = new BoardCell(0,0," ");
@@ -352,19 +368,19 @@ public class Board {
 			int i = current.getRow();
 			if(!visited.contains(getCellAt(i, j))) {
 				visited.add(current);
-
+				
 				if(current.isDoorway()) {
 					targets.add(current);
 					visited.remove(current);
 				}
+				
 				if(pathLength == 1) {
 					if(!targets.contains(getCellAt(i, j))) {
-
 						targets.add(current);
 						visited.remove(current);
-
 					}
 				}
+				
 				else {
 					calcTargets(current.getRow(), current.getCol(), pathLength -1);
 				}
@@ -374,17 +390,16 @@ public class Board {
 	}
 
 	public Card handleSuggestion(int indexOfPlayer, Solution suggestion) {
-		// creates new list of players in the correct order to play. Starting witht he current player up to one before the current player
+		// creates new list of players in the correct order to play. Starting with the current player up to one before the current player
 		// for example, current player = 2, 3,4,5,0,1
 		ArrayList<Player> playersInOrder = new ArrayList<>();
+		
 		for (int i = indexOfPlayer+1; i < players.size(); i++) {
 			playersInOrder.add(players.get(i));
 		}
 		for (int i = 0; i < indexOfPlayer; i++) {
 			playersInOrder.add(players.get(i));
 		}
-
-		//System.out.println(playersInOrder);
 
 		for(int i = 0; i < playersInOrder.size(); i++) {
 			Player p = playersInOrder.get(i);
@@ -396,6 +411,7 @@ public class Board {
 		}
 		return null;
 	}
+	
 	public boolean checkAccusation(Solution accusation){
 		if (solution.person.equals(accusation.person) && 
 				solution.room.equals(accusation.room) && 
@@ -436,16 +452,19 @@ public class Board {
 		solutionList.add(solution.weapon);
 		return solutionList;
 	}
+	
 	public Set<BoardCell> getAdjList(int x, int y){
 		BoardCell temp = getCellAt(x,y);
 
 		return adjMatrix.get(temp);
 	}
+	
 	public Set<BoardCell> getTargets(){
 		finalTargets = new HashSet<BoardCell>(targets);
 		targets.clear();
 		return finalTargets;
 	}
+	
 	public void setConfigFiles(String board, String legend) {
 		boardConfigFile = board;
 		roomConfigFile = legend;
@@ -477,15 +496,19 @@ public class Board {
 	public ArrayList<Player> getPlayers(){
 		return players;
 	}
+	
 	public ArrayList<Card> getDeck() {
 		return deck;
 	}
+	
 	public ArrayList<String> getWeapons() {
 		return weapons;
 	}
+	
 	public ArrayList<Card> getPlayerCards() {
 		return playerCards;
 	}
+	
 	public ArrayList<Card> getWeaponCards() {
 		return weaponCards;
 	}
