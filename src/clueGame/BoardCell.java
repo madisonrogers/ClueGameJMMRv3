@@ -34,39 +34,6 @@ public class BoardCell {
 		initial = str.charAt(0);
 	}
 
-	public int getRow() {
-		return row;
-	}
-	public int getCol() {
-		return col;
-	}
-	public DoorDirection getDoorDirection() {
-		return door;
-	}
-	public char getInitial() {
-		return initial;
-	}
-
-
-	public void setRow(int row) {
-		this.row = row;
-	}
-	public void setCol(int col) {
-		this.col = col;
-	}
-
-
-	@Override
-	public String toString() {
-		return "BoardCell [row=" + row + ", col=" + col + "]";
-	}
-
-
-	public void setInitial(char initial) {
-		this.initial = initial;
-	}
-
-
 	public boolean isWalkway() {
 		if (initial == 'W'){
 			return true;
@@ -75,6 +42,7 @@ public class BoardCell {
 			return false;
 		}
 	}
+	
 	public boolean isDoorway() {
 		if (door != DoorDirection.NONE){
 			return true;
@@ -83,10 +51,11 @@ public class BoardCell {
 			return false;
 		}
 	}
+	
 	public boolean isRoom() { //should a door be a room?
 		if ((initial != 'W') && (initial != 'X')){
 			if (door == DoorDirection.NONE){
-			return true;
+				return true;
 			}
 			else {
 				return false;
@@ -94,8 +63,38 @@ public class BoardCell {
 		}
 		else{
 			return false;
-		}
+		}	
+	}
+	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getCol() {
+		return col;
+	}
+	
+	public DoorDirection getDoorDirection() {
+		return door;
+	}
+	
+	public char getInitial() {
+		return initial;
 	}
 
+	public void setRow(int row) {
+		this.row = row;
+	}
+	public void setCol(int col) {
+		this.col = col;
+	}
+	
+	public void setInitial(char initial) {
+		this.initial = initial;
+	}
 
+	@Override
+	public String toString() {
+		return "Cell at (" + row + ", " + col + ")";
+	}
 }

@@ -185,7 +185,6 @@ public class Board {
 		while (in.hasNextLine()){ // has more players
 			String str = in.nextLine();
 			String[] words = str.split(",\\s");
-			//for (String i : words) System.out.println(i);
 			Color color;
 			try {
 				Field field = Class.forName("java.awt.Color").getField(words[1].trim());
@@ -242,11 +241,9 @@ public class Board {
 
 	private void dealDeck() {
 		Collections.shuffle(deck);
-		System.out.println(deck);
 		int index = 0;
 		
 		for (Card card : deck){
-			System.out.println();
 			players.get(index).addToHand(card);
 			if (index != players.size()-1){
 				index++;
@@ -442,7 +439,6 @@ public class Board {
 				break;
 			}
 		}
-		//		System.out.println(deck);
 	}
 
 	public ArrayList<String> getSolution() {
