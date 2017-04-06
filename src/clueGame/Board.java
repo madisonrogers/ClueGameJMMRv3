@@ -1,13 +1,18 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class Board {
+import javax.swing.JPanel;
+
+public class Board extends JPanel{
 	public static final int MAX_BOARD_SIZE = 50;
+	public static final int BOARD_WIDTH = 600; // FIXME: CHANGE THIS TO WORK WITH DIFFERENT CONFIG
+	public static final int BOARD_HEIGHT = 630;
 	
 	private int numRows;
 	private int numCols;
@@ -414,6 +419,15 @@ public class Board {
 				solution.room.equals(accusation.room) && 
 				solution.weapon.equals(accusation.weapon)) return true;
 		return false;
+	}
+	
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		for (BoardCell[] row : board){
+			for (BoardCell cell : row){
+				g = cell.draw(g);
+			}
+		}
 	}
 
 	public void setSolution(){

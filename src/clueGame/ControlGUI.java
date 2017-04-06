@@ -14,6 +14,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 public class ControlGUI extends JPanel {
+	public static final int FRAME_WIDTH = 800;
+	public static final int FRAME_HEIGHT = 940;
+	
 	public ControlGUI() {
 		setLayout(new BorderLayout());
 		JPanel infoPanel = createInfoPanel();// fix this hoe
@@ -93,11 +96,16 @@ public class ControlGUI extends JPanel {
 	public static void main(String[] args){
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(new Dimension(800, 300));
+		frame.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 
+		Board board = Board.getInstance();
+		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
+		board.initialize();
+		board.initializeGameplay();
+		frame.add(board, BorderLayout.CENTER);
 		// make instance of class
-		ControlGUI gui = new ControlGUI();
-		frame.add(gui, BorderLayout.CENTER); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST
+		ControlGUI infoPanel = new ControlGUI();
+		frame.add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST
 
 		// show frame
 		frame.setVisible(true);

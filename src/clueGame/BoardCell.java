@@ -1,10 +1,14 @@
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class BoardCell {
 	private int row;
 	private int col;
 	private char initial;
 	private DoorDirection door;
+	public static final int CELL_SIZE = 30;
 
 	public BoardCell(int row, int col, String str) {
 		super();
@@ -64,6 +68,31 @@ public class BoardCell {
 		else{
 			return false;
 		}	
+	}
+	
+	public Graphics draw(Graphics g){
+		g.setColor(Color.BLACK);
+		g.drawRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		g.setColor(Color.gray);
+		if (!this.isWalkway()) g.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		g.setColor(Color.WHITE);
+		if (this.isDoorway()){
+			switch(door){
+			case UP:
+				g.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE/6);
+				break;
+			case DOWN:
+				g.fillRect(row*CELL_SIZE, col*CELL_SIZE + (CELL_SIZE - CELL_SIZE/6), CELL_SIZE, CELL_SIZE/6);
+				break;
+			case LEFT:
+				g.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE/6, CELL_SIZE);
+				break;
+			case RIGHT:
+				g.fillRect(row*CELL_SIZE + (CELL_SIZE - CELL_SIZE/6), col*CELL_SIZE/6, CELL_SIZE, CELL_SIZE);
+				break;
+			}
+		}
+		return g;
 	}
 	
 	public int getRow() {
