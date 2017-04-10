@@ -13,21 +13,24 @@ import javax.swing.border.TitledBorder;
 public class DetectiveNotes extends JDialog{
 
 	private PeoplePanel people;
+	private WeaponsPanel weapons;
 	private Board board = Board.getInstance();
 
 	public DetectiveNotes() {
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
-//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
+		//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
-		
+
 		setTitle("Detective Notes");
 		setSize(400, 400);
 		setLayout(new GridLayout(2,3));
-		
+
 		people = new PeoplePanel();
-		
+		weapons = new WeaponsPanel();
+
 		add(people);
+		add(weapons);
 	}
 
 	public class PeoplePanel extends JPanel {
@@ -37,9 +40,9 @@ public class DetectiveNotes extends JDialog{
 
 		public PeoplePanel() {
 			super();
-			
+
 			checkBoxes = new ArrayList<JCheckBox>();
-			
+
 			player1 = new JCheckBox();
 			player2 = new JCheckBox();
 			player3 = new JCheckBox();
@@ -85,9 +88,64 @@ public class DetectiveNotes extends JDialog{
 			{
 				add(checkBox);
 			}
-			
+
 			// set the border and layout format 
 			setBorder(new TitledBorder(new EtchedBorder(), "People"));
+			setLayout(new FlowLayout());
+
+		}
+
+	}
+
+	public class WeaponsPanel extends JPanel{
+
+		private ArrayList<String> weapons = board.getWeapons();
+		private JCheckBox weapon1, weapon2, weapon3, weapon4;
+		private ArrayList<JCheckBox> weaponCheckBoxes;
+
+		public WeaponsPanel() {
+			super();
+
+			weaponCheckBoxes = new ArrayList<JCheckBox>();
+
+			weapon1 = new JCheckBox();
+			weapon2 = new JCheckBox();
+			weapon3 = new JCheckBox();
+			weapon4 = new JCheckBox();
+
+			for(int i = 0; i < weapons.size(); i++)
+			{
+				switch(i)
+				{
+				case 0:
+					weapon1.setText(weapons.get(i));
+					weaponCheckBoxes.add(weapon1);
+					break;
+				case 1:
+					weapon2.setText(weapons.get(i));
+					weaponCheckBoxes.add(weapon2);
+					break;	
+				case 2:
+					weapon3.setText(weapons.get(i));
+					weaponCheckBoxes.add(weapon3);
+					break;
+				case 3:
+					weapon4.setText(weapons.get(i));
+					weaponCheckBoxes.add(weapon4);
+					break;
+				default:
+					break;
+				}
+			}
+
+			// Add all the check boxes to the panel
+			for(JCheckBox checkBox : weaponCheckBoxes)
+			{
+				add(checkBox);
+			}
+
+			// set the border and layout format 
+			setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
 			setLayout(new FlowLayout());
 
 		}
