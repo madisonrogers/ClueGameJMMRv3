@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Board extends JPanel{
@@ -96,7 +97,6 @@ public class Board extends JPanel{
 		makeDeck();
 		setSolution();
 		dealDeck();
-
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException{ 

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -30,13 +31,11 @@ public class GUI extends JFrame {
 //		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
+		// TODO: add splash screen display
 		add(board, BorderLayout.CENTER);
 		// make instance of class
 		ControlGUI infoPanel = new ControlGUI();
-		add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST
-
-		// show frame
-		
+		add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST		
 	}
 	
 	public void menuBar(){
@@ -47,23 +46,9 @@ public class GUI extends JFrame {
 	
 	private JMenuItem createNotesMenu()
 	{
-		JMenu notes = new JMenu("Notes"); 
-		notes.addMenuListener(new MenuListener() {
-
-			@Override
-			public void menuCanceled(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuSelected(MenuEvent arg0) {
+		JMenuItem notes = new JMenuItem("Notes"); 
+		notes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				dialog = new DetectiveNotes();
 				dialog.setVisible(true);
 				System.out.println("Print me");				
@@ -90,5 +75,6 @@ public class GUI extends JFrame {
 	public static void main(String[] args){
 		GUI gui = new GUI();
 		gui.setVisible(true);
+		JOptionPane.showMessageDialog(gui, "You are ...", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
