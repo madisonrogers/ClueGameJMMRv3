@@ -534,6 +534,11 @@ public class Board extends JPanel{
 		return weapons;
 	}
 	
+	public ArrayList<String> getRooms()
+	{
+		return rooms;
+	}
+	
 	public ArrayList<Card> getPlayerCards() {
 		return playerCards;
 	}
