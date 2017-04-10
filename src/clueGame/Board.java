@@ -13,6 +13,9 @@ public class Board extends JPanel{
 	public static final int MAX_BOARD_SIZE = 50;
 	public static final int BOARD_WIDTH = 600; // FIXME: CHANGE THIS TO WORK WITH DIFFERENT CONFIG
 	public static final int BOARD_HEIGHT = 630;
+	public static final int MAX_WEAPONS = 4;
+	public static final int MAX_PLAYERS = 6;
+	public static final int MAX_ROOMS = 9;
 	
 	private int numRows;
 	private int numCols;
