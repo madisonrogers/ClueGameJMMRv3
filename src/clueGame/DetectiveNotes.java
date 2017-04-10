@@ -16,13 +16,18 @@ public class DetectiveNotes extends JDialog{
 	private Board board = Board.getInstance();
 
 	public DetectiveNotes() {
-		// TODO Auto-generated constructor stub
+		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
+//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
+		board.initialize();
+		board.initializeGameplay();
+		
 		setTitle("Detective Notes");
 		setSize(400, 400);
 		setLayout(new GridLayout(2,3));
 		
-		add(new PeoplePanel());
-
+		people = new PeoplePanel();
+		
+		add(people);
 	}
 
 	public class PeoplePanel extends JPanel {
@@ -32,7 +37,9 @@ public class DetectiveNotes extends JDialog{
 
 		public PeoplePanel() {
 			super();
-			// TODO Auto-generated constructor stub
+			
+			checkBoxes = new ArrayList<JCheckBox>();
+			
 			player1 = new JCheckBox();
 			player2 = new JCheckBox();
 			player3 = new JCheckBox();
@@ -46,27 +53,32 @@ public class DetectiveNotes extends JDialog{
 				{
 				case 0:
 					player1.setText(players.get(i).getPlayerName());
+					checkBoxes.add(player1);
 					break;
 				case 1:
 					player2.setText(players.get(i).getPlayerName());
+					checkBoxes.add(player2);
 					break;	
 				case 2:
 					player3.setText(players.get(i).getPlayerName());
+					checkBoxes.add(player3);
 					break;
 				case 3:
 					player4.setText(players.get(i).getPlayerName());
+					checkBoxes.add(player4);
 					break;
 				case 4:
 					player5.setText(players.get(i).getPlayerName());
+					checkBoxes.add(player5);
 					break;
 				case 5:
 					player6.setText(players.get(i).getPlayerName());
+					checkBoxes.add(player6);
 					break;
 				default:
 					break;
 				}
-			}
-
+			}			
 
 			// Add all the check boxes to the panel
 			for(JCheckBox checkBox : checkBoxes)

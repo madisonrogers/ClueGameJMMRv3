@@ -9,11 +9,14 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 public class GUI extends JFrame {
 	public static final int FRAME_WIDTH = 630;
 	public static final int FRAME_HEIGHT = 800;
 	private static JMenuBar menuBar;
+	private DetectiveNotes dialog;
 	
 	public GUI(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,23 +45,43 @@ public class GUI extends JFrame {
 		menuBar.add(createExitItem());
 	}
 	
-	private JMenu createNotesMenu()
+	private JMenuItem createNotesMenu()
 	{
-		JMenu menu = new JMenu("Notes"); 
-		// TODO: add detective notes Dialogue
-		return menu;
+		JMenu notes = new JMenu("Notes"); 
+		notes.addMenuListener(new MenuListener() {
+
+			@Override
+			public void menuCanceled(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				dialog = new DetectiveNotes();
+				dialog.setVisible(true);
+				System.out.println("Print me");				
+			}
+		});
+		return notes;
 	}
 	
 	private JMenuItem createExitItem()
 	{
 		JMenuItem item = new JMenuItem("Exit");
-		class MenuItemListener implements ActionListener {
+		class ExitItemListener implements ActionListener {
 			public void actionPerformed(ActionEvent e)
 			{
 				System.exit(0);
 			}
 		}
-		item.addActionListener(new MenuItemListener());
+		item.addActionListener(new ExitItemListener());
 
 		return item;
 	}
