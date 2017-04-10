@@ -92,7 +92,7 @@ public class BoardCell {
 				g.fillRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE/6, CELL_SIZE);
 				break;
 			case RIGHT:
-				g.fillRect(col*CELL_SIZE + (CELL_SIZE - CELL_SIZE/6), row*CELL_SIZE/6, CELL_SIZE, CELL_SIZE);
+				g.fillRect((col + 1)*CELL_SIZE - CELL_SIZE/6, row*CELL_SIZE, CELL_SIZE/6, CELL_SIZE);
 				break;
 			}
 		}
