@@ -8,6 +8,10 @@ public class BoardCell {
 	private int col;
 	private char initial;
 	private DoorDirection door;
+	public void setDoor(DoorDirection door) {
+		this.door = door;
+	}
+
 	public static final int CELL_SIZE = 30;
 
 	public BoardCell(int row, int col, String str) {
@@ -69,26 +73,26 @@ public class BoardCell {
 			return false;
 		}	
 	}
-	
+//	
 	public Graphics draw(Graphics g){
 		g.setColor(Color.BLACK);
-		g.drawRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		g.drawRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE); 
 		g.setColor(Color.gray);
-		if (!this.isWalkway()) g.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		if (!this.isWalkway()) g.fillRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE);
 		g.setColor(Color.WHITE);
 		if (this.isDoorway()){
 			switch(door){
 			case UP:
-				g.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE/6);
+				g.fillRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE/6);
 				break;
 			case DOWN:
-				g.fillRect(row*CELL_SIZE, col*CELL_SIZE + (CELL_SIZE - CELL_SIZE/6), CELL_SIZE, CELL_SIZE/6);
+				g.fillRect(col*CELL_SIZE, row*CELL_SIZE + (CELL_SIZE - CELL_SIZE/6), CELL_SIZE, CELL_SIZE/6);
 				break;
 			case LEFT:
-				g.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE/6, CELL_SIZE);
+				g.fillRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE/6, CELL_SIZE);
 				break;
 			case RIGHT:
-				g.fillRect(row*CELL_SIZE + (CELL_SIZE - CELL_SIZE/6), col*CELL_SIZE/6, CELL_SIZE, CELL_SIZE);
+				g.fillRect(col*CELL_SIZE + (CELL_SIZE - CELL_SIZE/6), row*CELL_SIZE/6, CELL_SIZE, CELL_SIZE);
 				break;
 			}
 		}
@@ -111,7 +115,8 @@ public class BoardCell {
 		return initial;
 	}
 
-	public void setRow(int row) {
+	
+public void setRow(int row) {
 		this.row = row;
 	}
 	public void setCol(int col) {

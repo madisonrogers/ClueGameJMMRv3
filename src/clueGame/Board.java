@@ -121,9 +121,9 @@ public class Board extends JPanel{
 		BoardCell[][] tempBoard = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 		FileReader read = new FileReader(boardConfigFile);
 		Scanner in = new Scanner(read);
-		int i = 0;
-		int j = 0;
-		int count = 0;
+		int row = 0;
+		int column = 0;
+//		int count = 0;
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		
 		while (in.hasNextLine()){
@@ -134,15 +134,15 @@ public class Board extends JPanel{
 				if (!legend.containsKey(s.charAt(0))){
 					throw new BadConfigFormatException("ERROR:Room not included in legend");
 				}
-				tempBoard[i][j] = new BoardCell(i,j,s); 
-				j++;
+				tempBoard[row][column] = new BoardCell(row,column,s); 
+				column++;
 			}
-			j = 0;
-			i++;
+			column = 0;
+			row++;
 		}
 		
-		int row = 0;
-		int col = 0;
+		row = 0;
+		column = 0;
 		int tempC = 0;
 
 		for (BoardCell[] b: tempBoard){//finds where the nulls start in order to form the actual array
@@ -154,7 +154,7 @@ public class Board extends JPanel{
 					break;
 				}
 				tempC++;
-				col++;
+				column++;
 			}
 			if (b[0] == null){
 				break;
@@ -170,7 +170,8 @@ public class Board extends JPanel{
 		}
 
 		numRows = row - 1;
-		numCols = col/numRows;
+		numCols = column/numRows;
+//		System.out.println(row + " " + column + " " + numRows + " " + numCols);
 		board = new BoardCell[numRows][numCols];
 		
 		for (int p = 0; p < numRows; p++){
@@ -425,9 +426,12 @@ public class Board extends JPanel{
 		super.paintComponent(g);
 		for (BoardCell[] row : board){
 			for (BoardCell cell : row){
-				g = cell.draw(g);
+//				System.out.print("(" + cell.getRow() + ", " + cell.getCol() + ") ");
+				cell.draw(g);
 			}
+			System.out.println();
 		}
+		System.out.println();
 	}
 
 	public void setSolution(){

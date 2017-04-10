@@ -100,6 +100,7 @@ public class ControlGUI extends JPanel {
 
 		Board board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
+//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
 		frame.add(board, BorderLayout.CENTER);
