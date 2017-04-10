@@ -426,12 +426,24 @@ public class Board extends JPanel{
 		super.paintComponent(g);
 		for (BoardCell[] row : board){
 			for (BoardCell cell : row){
-//				System.out.print("(" + cell.getRow() + ", " + cell.getCol() + ") ");
 				cell.draw(g);
 			}
-			System.out.println();
 		}
-		System.out.println();
+		
+		// write room names
+		g.drawString("Bedroom", 20, 40);
+		g.drawString("Pool", 180, 40);
+		g.drawString("Wine Cellar", 320, 40);
+		g.drawString("Dining Room", 500, 40);
+		g.drawString("Kitchen", 20, 300);
+		g.drawString("Lounge", 500, 400);
+		g.drawString("Foyer", 20, 580);
+		g.drawString("TV Room", 220, 580);
+		g.drawString("Restroom", 520, 580);
+		
+		for (Player player : players){
+			player.draw(g);
+		}
 	}
 
 	public void setSolution(){

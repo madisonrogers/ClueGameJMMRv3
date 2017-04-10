@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -47,6 +48,12 @@ public class Player {
 	public Solution accuse(String person, String room, String weapon){
 		Solution solution = new Solution(person, room, weapon);
 		return solution;
+	}
+	
+	public Graphics draw(Graphics g){
+		g.setColor(color);
+		g.fillOval(column*30, row*30, 30, 30);
+		return g;
 	}
 	
 	// the three methods below are for the computer player to make smart suggestions

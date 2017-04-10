@@ -1,12 +1,9 @@
 package clueGame;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -14,8 +11,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 public class ControlGUI extends JPanel {
-	public static final int FRAME_WIDTH = 800;
-	public static final int FRAME_HEIGHT = 940;
 	
 	public ControlGUI() {
 		setLayout(new BorderLayout());
@@ -91,24 +86,5 @@ public class ControlGUI extends JPanel {
 		panel.add(guessPanel);
 		panel.add(resultPanel);
 		return panel;
-	}
-
-	public static void main(String[] args){
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-
-		Board board = Board.getInstance();
-		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
-//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
-		board.initialize();
-		board.initializeGameplay();
-		frame.add(board, BorderLayout.CENTER);
-		// make instance of class
-		ControlGUI infoPanel = new ControlGUI();
-		frame.add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST
-
-		// show frame
-		frame.setVisible(true);
-	}
+	}	
 }
