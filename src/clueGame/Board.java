@@ -435,14 +435,14 @@ public class Board extends JPanel{
 		
 		// write room names
 		g.drawString("Bedroom", 20, 40);
-		g.drawString("Pool", 180, 40);
-		g.drawString("Wine Cellar", 320, 40);
-		g.drawString("Dining Room", 500, 40);
-		g.drawString("Kitchen", 20, 300);
-		g.drawString("Lounge", 500, 400);
-		g.drawString("Foyer", 20, 580);
+		g.drawString("Pool", 200, 60);
+		g.drawString("Wine Cellar", 330, 60);
+		g.drawString("Dining Room", 500, 150);
+		g.drawString("Kitchen", 20, 260);
+		g.drawString("Lounge", 500, 380);
+		g.drawString("Foyer", 40, 580);
 		g.drawString("TV Room", 220, 580);
-		g.drawString("Restroom", 520, 580);
+		g.drawString("Restroom", 520, 560);
 		
 		for (Player player : players){
 			player.draw(g);

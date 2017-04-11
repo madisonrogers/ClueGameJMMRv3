@@ -66,7 +66,7 @@ public class ControlGUI extends JPanel {
 		JPanel guessPanel = new JPanel();
 		JLabel guess = new JLabel("Guess");
 		roll.setHorizontalAlignment(JLabel.RIGHT);
-		JTextField guessField = new JTextField(30);
+		JTextField guessField = new JTextField(25);
 		guessField.setEditable(false);
 		guessPanel.add(guess);
 		guessPanel.add(guessField);
