@@ -15,6 +15,15 @@ public class ComputerPlayer extends Player {
 		lastRoom = 'W';
 	}
 	
+	public void makeMove(Set<BoardCell> targets){
+		BoardCell endLocation = selectTarget(targets);
+		this.setLocation(endLocation);
+	}
+	
+	public Solution movedToRoom(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend){
+		return createSuggestion(location, players, weapons, legend);
+	}
+	
 	// smart location picker from targets
 	public BoardCell selectTarget(Set<BoardCell> targets){
 		for (BoardCell cell : targets){

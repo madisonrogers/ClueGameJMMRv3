@@ -3,9 +3,11 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
-public class Player {
+public abstract class Player {
 	private String playerName;
 	private int row, column;
 	private Color color;
@@ -49,6 +51,10 @@ public class Player {
 		Solution solution = new Solution(person, room, weapon);
 		return solution;
 	}
+	
+	public abstract void makeMove(Set<BoardCell> targets);
+	
+	public abstract Solution movedToRoom(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend);
 	
 	public Graphics draw(Graphics g){
 		g.setColor(color);
