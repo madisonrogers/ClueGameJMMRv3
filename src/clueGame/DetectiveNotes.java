@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
@@ -13,7 +14,11 @@ import javax.swing.border.TitledBorder;
 public class DetectiveNotes extends JDialog{
 
 	private PeoplePanel people;
+	private RoomsPanel rooms;
 	private WeaponsPanel weapons;
+	private PersonGuess personGuess;
+	private RoomGuess roomGuess;
+	private WeaponGuess weaponGuess;
 	private Board board = Board.getInstance();
 
 	public DetectiveNotes() {
@@ -23,14 +28,74 @@ public class DetectiveNotes extends JDialog{
 		board.initializeGameplay();
 
 		setTitle("Detective Notes");
-		setSize(400, 400);
-		setLayout(new GridLayout(2,3));
+		setSize(500, 500);
+		setLayout(new GridLayout(3,2));
 
 		people = new PeoplePanel();
+		rooms = new RoomsPanel();
 		weapons = new WeaponsPanel();
+		personGuess = new PersonGuess();
+		roomGuess = new RoomGuess();
+		weaponGuess = new WeaponGuess();
 
 		add(people);
+		add(personGuess);
+		add(rooms);
+		add(roomGuess);
 		add(weapons);
+		add(weaponGuess);
+	}
+	
+	public class PersonGuess extends JPanel{
+		private JComboBox<String> guess = new JComboBox<String>();
+		private ArrayList<Player> players = board.getPlayers();
+
+		public PersonGuess() {
+			super();
+			// TODO Auto-generated constructor stub
+			for(Player player : players)
+			{
+				guess.addItem(player.getPlayerName());
+			}
+			
+			add(guess);
+			setBorder(new TitledBorder(new EtchedBorder(), "Person Guess"));
+		}
+		
+	}
+	
+	public class RoomGuess extends JPanel {
+		private JComboBox<String> guess = new JComboBox<String>();
+		private ArrayList<String> rooms = board.getRooms();
+
+		public RoomGuess() {
+			super();
+			// TODO Auto-generated constructor stub
+			for(String room : rooms)
+			{
+				guess.addItem(room);
+			}
+			
+			add(guess);
+			setBorder(new TitledBorder(new EtchedBorder(), "Room Guess"));
+		}
+	}
+	
+	public class WeaponGuess extends JPanel {
+		private JComboBox<String> guess = new JComboBox<String>();
+		private ArrayList<String> weapons = board.getWeapons();
+
+		public WeaponGuess() {
+			super();
+			// TODO Auto-generated constructor stub
+			for(String weapon : weapons)
+			{
+				guess.addItem(weapon);
+			}
+			
+			add(guess);
+			setBorder(new TitledBorder(new EtchedBorder(), "Weapon Guess"));
+		}
 	}
 
 	public class PeoplePanel extends JPanel {
@@ -91,10 +156,89 @@ public class DetectiveNotes extends JDialog{
 
 			// set the border and layout format 
 			setBorder(new TitledBorder(new EtchedBorder(), "People"));
-			setLayout(new FlowLayout());
+			setLayout(new GridLayout(0,2));
 
 		}
+	}
+	
+	public class RoomsPanel extends JPanel
+	{
+		private ArrayList<String> rooms = board.getRooms();
+		private JCheckBox room1, room2, room3, room4, room5, room6, room7, room8, room9;
+		private ArrayList<JCheckBox> roomCheckBoxes;
+		
+		public RoomsPanel() {
+			super();
+			// TODO Auto-generated constructor stub
+			
+			roomCheckBoxes = new ArrayList<JCheckBox>();
+			
+			room1 = new JCheckBox();
+			room2 = new JCheckBox();
+			room3 = new JCheckBox();
+			room4 = new JCheckBox();
+			room5 = new JCheckBox();
+			room6 = new JCheckBox();
+			room7 = new JCheckBox();
+			room8 = new JCheckBox();
+			room9 = new JCheckBox();
+			
+			for(int i = 0; i < rooms.size(); i++)
+			{
+				switch(i)
+				{
+				case 0:
+					room1.setText(rooms.get(i));
+					roomCheckBoxes.add(room1);
+					break;
+				case 1:
+					room2.setText(rooms.get(i));
+					roomCheckBoxes.add(room2);
+					break;	
+				case 2:
+					room3.setText(rooms.get(i));
+					roomCheckBoxes.add(room3);
+					break;
+				case 3:
+					room4.setText(rooms.get(i));
+					roomCheckBoxes.add(room4);
+					break;
+				case 4:
+					room5.setText(rooms.get(i));
+					roomCheckBoxes.add(room5);
+					break;
+				case 5:
+					room6.setText(rooms.get(i));
+					roomCheckBoxes.add(room6);
+					break;
+				case 6:
+					room7.setText(rooms.get(i));
+					roomCheckBoxes.add(room7);
+					break;
+				case 7:
+					room8.setText(rooms.get(i));
+					roomCheckBoxes.add(room8);
+					break;
+				case 8:
+					room9.setText(rooms.get(i));
+					roomCheckBoxes.add(room9);
+					break;
+				default:
+					break;
+				}
+			}
 
+			// Add all the check boxes to the panel
+			for(JCheckBox checkBox : roomCheckBoxes)
+			{
+				add(checkBox);
+			}
+
+			// set the border and layout format 
+			setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
+			setLayout(new GridLayout(0,2));
+		}
+		
 	}
 
 	public class WeaponsPanel extends JPanel{
@@ -146,8 +290,7 @@ public class DetectiveNotes extends JDialog{
 
 			// set the border and layout format 
 			setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
-			setLayout(new FlowLayout());
-
+			setLayout(new GridLayout(0,2));
 		}
 
 	}
