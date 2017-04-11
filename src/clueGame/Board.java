@@ -526,6 +526,15 @@ public class Board extends JPanel{
 		return players;
 	}
 	
+	public Player getHumanPlayer(){
+		for (Player player : players){
+			if (player instanceof HumanPlayer){
+				return player;
+			}
+		}
+		return null;
+	}
+	
 	public ArrayList<Card> getDeck() {
 		return deck;
 	}

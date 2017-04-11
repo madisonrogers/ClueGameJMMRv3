@@ -6,18 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 public class GUI extends JFrame {
-	public static final int FRAME_WIDTH = 630;
+	public static final int FRAME_WIDTH = 780;
 	public static final int FRAME_HEIGHT = 800;
 	private static JMenuBar menuBar;
 	private DetectiveNotes dialog;
+	public static Board board;
 	
 	public GUI(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +24,7 @@ public class GUI extends JFrame {
 		menuBar();
 		setJMenuBar(menuBar);
 		
-		Board board = Board.getInstance();
+		board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
 //		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
@@ -35,7 +33,10 @@ public class GUI extends JFrame {
 		add(board, BorderLayout.CENTER);
 		// make instance of class
 		ControlGUI infoPanel = new ControlGUI();
-		add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST		
+		add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST	
+		
+		HandPanel myCards = new HandPanel(board.getHumanPlayer().getHand());
+		add(myCards, BorderLayout.EAST);
 	}
 	
 	public void menuBar(){
@@ -71,10 +72,12 @@ public class GUI extends JFrame {
 		return item;
 	}
 
-	
 	public static void main(String[] args){
 		GUI gui = new GUI();
 		gui.setVisible(true);
-		JOptionPane.showMessageDialog(gui, "You are ...", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
+		
+		// Splash screen on startup
+		Player human = board.getHumanPlayer();
+		JOptionPane.showMessageDialog(gui, "You are " + human.getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
