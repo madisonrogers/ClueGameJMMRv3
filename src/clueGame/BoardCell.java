@@ -7,6 +7,7 @@ public class BoardCell {
 	private int row;
 	private int col;
 	private char initial;
+	private boolean highlight;
 	private DoorDirection door;
 	public void setDoor(DoorDirection door) {
 		this.door = door;
@@ -19,6 +20,7 @@ public class BoardCell {
 		this.row = row;
 		this.col = col;
 		door = DoorDirection.NONE;
+		highlight = false;
 		if (str.length() == 2){
 			char c = str.charAt(1);
 			switch (c){
@@ -40,6 +42,14 @@ public class BoardCell {
 			}
 		}
 		initial = str.charAt(0);
+	}
+
+	public boolean isHighlight() {
+		return highlight;
+	}
+
+	public void setHighlight(boolean highlight) {
+		this.highlight = highlight;
 	}
 
 	public boolean isWalkway() {
@@ -77,7 +87,12 @@ public class BoardCell {
 	public Graphics draw(Graphics g){
 		g.setColor(Color.BLACK);
 		g.drawRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE); 
-		g.setColor(Color.gray);
+		if (highlight){
+			g.setColor(Color.RED);
+			g.fillRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		} else {
+			g.setColor(Color.gray);
+		}
 		if (!this.isWalkway()) g.fillRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE);
 		g.setColor(Color.WHITE);
 		if (this.isDoorway()){

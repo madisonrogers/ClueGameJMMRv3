@@ -426,26 +426,26 @@ public class Board extends JPanel{
 		return false;
 	}
 
-	public void runGame(Player activePlayer){
-		//		solutionGuessed = false;
-		//		int index = 0; 
-		//		while (!solutionGuessed){
-		//		Player activePlayer = players.get(index);
-		// roll die
-		int dieRoll = new Random().nextInt(6) + 1;
-		calcTargets(activePlayer.getColumn(), activePlayer.getRow(), dieRoll);
-
-		activePlayer.makeMove(targets);
-		targets.clear();
-		repaint();
-
-		if (this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
-			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
-			handleSuggestion(players.indexOf(activePlayer), suggestion);
-		}
-//		index = ++index % players.size();
-		//		}
-	}
+//	public void runGame(Player activePlayer){
+//		//		solutionGuessed = false;
+//		//		int index = 0; 
+//		//		while (!solutionGuessed){
+//		//		Player activePlayer = players.get(index);
+//		// roll die
+//		int dieRoll = new Random().nextInt(6) + 1;
+//		calcTargets(activePlayer.getColumn(), activePlayer.getRow(), dieRoll);
+//
+//		activePlayer.makeMove(targets);
+//		targets.clear();
+//		repaint();
+//
+//		if (this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
+//			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
+//			handleSuggestion(players.indexOf(activePlayer), suggestion);
+//		}
+////		index = ++index % players.size();
+//		//		}
+//	}
 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);

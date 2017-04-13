@@ -25,6 +25,8 @@ public class GUI extends JFrame {
 	private DetectiveNotes dialog;
 	public static Board board;
 	private int currentPlayerIndex;
+	private int dieRoll;
+	private ControlGUI infoPanel;
 	
 	public GUI(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,7 +45,7 @@ public class GUI extends JFrame {
 		// TODO: add splash screen display
 		add(board, BorderLayout.CENTER);
 		// make instance of class
-		ControlGUI infoPanel = new ControlGUI();
+		infoPanel = new ControlGUI();
 		add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST	
 		
 		HandPanel myCards = new HandPanel(board.getHumanPlayer().getHand());
@@ -84,18 +86,32 @@ public class GUI extends JFrame {
 	}
 	
 	public void runGame(int playerIndex){
+		Card suggestionResult = null;
+		Solution suggestion = null;
+		
 		Player activePlayer = board.getPlayers().get(playerIndex);
-		int dieRoll = new Random().nextInt(6) + 1;
+		dieRoll = new Random().nextInt(6) + 1;
 		board.calcTargets(activePlayer.getColumn(), activePlayer.getRow(), dieRoll);
 
-		activePlayer.makeMove(board.getTargets());
+		for (BoardCell cell : board.getTargets()){
+			cell.setHighlight(true);
+		}
+		System.out.println(dieRoll);
 		repaint();
+		activePlayer.makeMove(board.getTargets());
 
 		if (board.getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
-			Solution suggestion = activePlayer.movedToRoom(board.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), board.getPlayerCards(), board.getWeaponCards(), board.getLegend());
-			board.handleSuggestion(board.getPlayers().indexOf(activePlayer), suggestion);
+			suggestion = activePlayer.movedToRoom(board.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), board.getPlayerCards(), board.getWeaponCards(), board.getLegend());
+			suggestionResult = board.handleSuggestion(board.getPlayers().indexOf(activePlayer), suggestion);
+			infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
+		} else {
+			// add overloaded function 
 		}
+
+		repaint();
+		
 		currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
+		
 	}
 
 	public static void main(String[] args){
@@ -108,6 +124,9 @@ public class GUI extends JFrame {
 	}
 	
 	public class ControlGUI extends JPanel {
+		JTextField rollField;
+		JTextField guessField;
+		JTextField resultField;
 		
 		public ControlGUI() {
 			setLayout(new BorderLayout());
@@ -154,7 +173,7 @@ public class GUI extends JFrame {
 			JPanel diePanel = new JPanel();
 			JLabel roll = new JLabel("Roll");
 			roll.setHorizontalAlignment(JLabel.RIGHT);
-			JTextField rollField = new JTextField(5);
+			rollField = new JTextField(5);
 			rollField.setEditable(false);
 			diePanel.add(roll);
 			diePanel.add(rollField);
@@ -164,7 +183,7 @@ public class GUI extends JFrame {
 			JPanel guessPanel = new JPanel();
 			JLabel guess = new JLabel("Guess");
 			roll.setHorizontalAlignment(JLabel.RIGHT);
-			JTextField guessField = new JTextField(25);
+			guessField = new JTextField(25);
 			guessField.setEditable(false);
 			guessPanel.add(guess);
 			guessPanel.add(guessField);
@@ -174,7 +193,7 @@ public class GUI extends JFrame {
 			JPanel resultPanel = new JPanel();
 			JLabel response = new JLabel("Response");
 			roll.setHorizontalAlignment(JLabel.RIGHT);
-			JTextField resultField = new JTextField(15);
+			resultField = new JTextField(15);
 			resultField.setEditable(false);
 			resultPanel.add(response);
 			resultPanel.add(resultField);
@@ -185,6 +204,13 @@ public class GUI extends JFrame {
 			panel.add(resultPanel);
 			return panel;
 		}	
+		
+		public void updateInfoPanel(Integer dieRoll, Solution guess, Card result) {
+			rollField.setText(dieRoll.toString());
+			// only update when can make a guess
+//			guessField.setText(guess.toString());
+//			resultField.setText(result.getCardName());
+		}
 		
 		private class ButtonListener implements ActionListener{
 			@Override
