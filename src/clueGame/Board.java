@@ -204,6 +204,7 @@ public class Board extends JPanel{
 			}
 			int row = Integer.parseInt(words[2]);
 			int column = Integer.parseInt(words[3]);
+//			System.out.println(row + " " + column);
 			if (words[4].equalsIgnoreCase("Human")) 
 				players.add(new HumanPlayer(words[0], color, row, column));
 			else 

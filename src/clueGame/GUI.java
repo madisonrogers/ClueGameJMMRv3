@@ -8,12 +8,14 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -27,6 +29,7 @@ public class GUI extends JFrame {
 	private int currentPlayerIndex;
 	private int dieRoll;
 	private ControlGUI infoPanel;
+	private boolean playerTurnOver;
 	
 	public GUI(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,6 +39,7 @@ public class GUI extends JFrame {
 		setJMenuBar(menuBar);
 		
 		currentPlayerIndex = 0;
+		playerTurnOver = true;
 		
 		board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
@@ -86,6 +90,7 @@ public class GUI extends JFrame {
 	}
 	
 	public void runGame(int playerIndex){
+		playerTurnOver = false;
 		Card suggestionResult = null;
 		Solution suggestion = null;
 		
@@ -111,6 +116,8 @@ public class GUI extends JFrame {
 		repaint();
 		
 		currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
+		
+		playerTurnOver = false;
 		
 	}
 
@@ -215,7 +222,30 @@ public class GUI extends JFrame {
 		private class ButtonListener implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if (!playerTurnOver){
+					System.out.println("Made it");
+					JDialog playerNotOver = new JDialog();
+					playerNotOver.setLayout(new GridLayout(2,1));
+					playerNotOver.setSize(300, 100);
+					playerNotOver.setTitle("Error");
+					JLabel error = new JLabel("You didn't finish your turn!");
+					error.setSize(30,30);
+					JButton ok = new JButton("OK!");
+					
+					class ExitItemListener implements ActionListener {
+						public void actionPerformed(ActionEvent e)
+						{
+							playerNotOver.setVisible(false);
+						}
+					}
+					ok.addActionListener(new ExitItemListener());
+					
+					playerNotOver.add(error);
+					playerNotOver.add(ok);
+					playerNotOver.setVisible(true);
+				}
 				// gotta check for proper turn error thing
+				
 				runGame(currentPlayerIndex);
 			}
 		}
