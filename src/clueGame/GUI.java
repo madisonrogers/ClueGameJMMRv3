@@ -18,8 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import clueGame.ControlGUI.ButtonListener;
-
 public class GUI extends JFrame {
 	public static final int FRAME_WIDTH = 780;
 	public static final int FRAME_HEIGHT = 800;
@@ -98,10 +96,6 @@ public class GUI extends JFrame {
 			board.handleSuggestion(board.getPlayers().indexOf(activePlayer), suggestion);
 		}
 		currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
-	}
-	
-	public Player getNextPlayer(){
-		
 	}
 
 	public static void main(String[] args){
