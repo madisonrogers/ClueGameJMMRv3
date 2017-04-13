@@ -91,7 +91,7 @@ public class GUI extends JFrame {
 		
 		Player activePlayer = board.getPlayers().get(playerIndex);
 		dieRoll = new Random().nextInt(6) + 1;
-		board.calcTargets(activePlayer.getColumn(), activePlayer.getRow(), dieRoll);
+		board.calcTargets(activePlayer.getRow(), activePlayer.getColumn(), dieRoll);
 
 		for (BoardCell cell : board.getTargets()){
 			cell.setHighlight(true);
