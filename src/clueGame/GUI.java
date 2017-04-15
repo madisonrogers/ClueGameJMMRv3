@@ -40,7 +40,7 @@ public class GUI extends JFrame {
 		menuBar();
 		setJMenuBar(menuBar);
 		
-		currentPlayerIndex = 0;
+		currentPlayerIndex = -1;
 		
 		board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
@@ -71,8 +71,7 @@ public class GUI extends JFrame {
 		notes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				detectiveNotes = new DetectiveNotes();
-				detectiveNotes.setVisible(true);
-				System.out.println("Print me");				
+				detectiveNotes.setVisible(true);			
 			}
 		});
 		return notes;
@@ -98,7 +97,9 @@ public class GUI extends JFrame {
 		
 		dieRoll = new Random().nextInt(6) + 1;
 		
-		suggestion = board.runGame(playerIndex, dieRoll);
+//		if (!board.getPlayers().get(currentPlayerIndex).isTurnOver()){
+			suggestion = board.runGame(playerIndex, dieRoll);
+//		}
 		
 		if (suggestion != null){
 			suggestionResult = board.handleSuggestion(playerIndex, suggestion);
@@ -107,9 +108,7 @@ public class GUI extends JFrame {
 			infoPanel.updateInfoPanel(dieRoll); 
 		}
 
-		repaint();
-		
-		currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();		
+		repaint();		
 	}
 
 	public static void main(String[] args){
@@ -209,8 +208,8 @@ public class GUI extends JFrame {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
 			guessField.setText(guess.toString());
-			if (resultField != null){
-				resultField.setText(result.getCardName());
+			if (resultField != null){ // FIXME: make this work
+//				resultField.setText(result.getCardName());
 			} else resultField.setText(""); // should be empty if no one can disprove
 		}
 		
@@ -222,10 +221,15 @@ public class GUI extends JFrame {
 		private class ButtonListener implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!board.getPlayers().get(currentPlayerIndex).isTurnOver()){
+				// if current player's turn is over, increment index
+								
+				if (currentPlayerIndex >= 0 && !board.getPlayers().get(currentPlayerIndex).isTurnOver()){
 					JOptionPane.showMessageDialog(null, "The current player's turn isn't over!", "Turn not over", JOptionPane.INFORMATION_MESSAGE);
 				} else {
+					currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
 					runGame(currentPlayerIndex);
+//					if (board.getPlayers().get(currentPlayerIndex).isTurnOver()){
+//					}
 				}
 			}
 		}

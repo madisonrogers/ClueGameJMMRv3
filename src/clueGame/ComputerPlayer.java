@@ -18,6 +18,7 @@ public class ComputerPlayer extends Player {
 	public void makeMove(Set<BoardCell> targets){
 		BoardCell endLocation = selectTarget(targets);
 		this.setLocation(endLocation);
+		turnOver = true;
 	}
 	
 	public Solution movedToRoom(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend){

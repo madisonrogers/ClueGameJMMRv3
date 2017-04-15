@@ -28,7 +28,7 @@ public abstract class Player {
 		seenWeapons = new ArrayList<Card>();
 		hand = new ArrayList<Card>();
 		
-		turnOver = true;
+		turnOver = false;
 	}
 
 	public Card disproveSuggestion(Solution suggestion){
