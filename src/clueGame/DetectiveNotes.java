@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -22,10 +23,7 @@ public class DetectiveNotes extends JDialog{
 	private Board board = Board.getInstance();
 
 	public DetectiveNotes() {
-		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
-		//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
-		board.initialize();
-		board.initializeGameplay();
+		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE); // FIXME: make the notes save -> this doesnt work properly
 
 		setTitle("Detective Notes");
 		setSize(500, 500);

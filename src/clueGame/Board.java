@@ -2,6 +2,10 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
@@ -14,13 +18,16 @@ public class Board extends JPanel{
 	public static final int MAX_BOARD_SIZE = 50;
 	public static final int BOARD_WIDTH = 600; // FIXME: CHANGE THIS TO WORK WITH DIFFERENT CONFIG
 	public static final int BOARD_HEIGHT = 630;
+	public static final int CELL_SIZE = 30;
 	public static final int MAX_WEAPONS = 4;
 	public static final int MAX_PLAYERS = 6;
 	public static final int MAX_ROOMS = 9;
+	
 
 	private int numRows;
 	private int numCols;
 	private BoardCell[][] board;
+	private Player activePlayer;
 
 	private Map<Character, String> legend;
 	private Map<Character, Boolean> roomHasCard;
@@ -34,7 +41,6 @@ public class Board extends JPanel{
 	private String roomConfigFile;
 	private String playerConfigFile;
 	private String weaponConfigFile;
-
 
 	private ArrayList<Card> deck;
 	private ArrayList<Player> players;
@@ -58,8 +64,8 @@ public class Board extends JPanel{
 		roomHasCard = new HashMap<Character, Boolean>();
 		targets = new HashSet<BoardCell>();
 		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
-		
-//		addActionListener(new MouseListener());
+
+		addMouseListener(new boardListener());
 	}
 
 	// this method returns the only Board
@@ -206,7 +212,7 @@ public class Board extends JPanel{
 			}
 			int row = Integer.parseInt(words[2]);
 			int column = Integer.parseInt(words[3]);
-//			System.out.println(row + " " + column);
+			//			System.out.println(row + " " + column);
 			if (words[4].equalsIgnoreCase("Human")) 
 				players.add(new HumanPlayer(words[0], color, row, column));
 			else 
@@ -430,29 +436,24 @@ public class Board extends JPanel{
 	}
 
 	public Solution runGame(int activePlayerIndex, int dieRoll){
-		//		solutionGuessed = false;
-		//		int index = 0; 
-		//		while (!solutionGuessed){
-		//		Player activePlayer = players.get(index);
-		// roll die
-		Player activePlayer = players.get(activePlayerIndex);
-		
-		calcTargets(activePlayer.getColumn(), activePlayer.getRow(), dieRoll);
+		activePlayer = players.get(activePlayerIndex);
+
+		calcTargets(activePlayer.getRow(), activePlayer.getColumn(), dieRoll);
 
 		for (BoardCell cell : targets){
 			cell.setHighlight(true);
 		}
 		repaint();
-		
+
 		activePlayer.makeMove(targets);
 		targets.clear();
-		
+
 		// if the player is in a room allow them to make a solution
 		if (getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
 			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
 			return suggestion;
 		}
-		
+
 		return null;
 	}
 
@@ -477,6 +478,73 @@ public class Board extends JPanel{
 
 		for (Player player : players){
 			player.draw(g);
+		}
+	}
+
+	private class boardListener implements MouseListener{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			int x = e.getX();
+			int y = e.getY();
+			int row = (int) Math.floor(y/CELL_SIZE);
+			int column = (int) Math.floor(x/CELL_SIZE);
+			
+			boolean invalidClick = false;
+
+			// throw error pane if it isn't the players turn
+			if (!(activePlayer instanceof HumanPlayer)){
+				JOptionPane.showMessageDialog(null, "It isn't your turn!", "Play in order", JOptionPane.INFORMATION_MESSAGE);
+			}
+			for (BoardCell[] boardRow : board){
+				for (BoardCell cell : boardRow){
+					if (column == cell.getCol() && row == cell.getRow()){
+						if (!cell.isHighlight()){
+							invalidClick = true;
+						} else { // clicked on a highlighted target
+							activePlayer.setTurnOver(true);
+							activePlayer.setLocation(cell);
+							
+							if (cell.isRoom()){
+								// TODO: add dialog to make suggestion
+							}
+						}
+					}
+				}
+			}
+			if (invalidClick){
+				JOptionPane.showMessageDialog(null, "Not a valid spot", "Choose a valid spot", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				for (BoardCell[] boardRow : board){
+					for (BoardCell cell : boardRow){
+						cell.setHighlight(false);
+					}
+				}
+				repaint();
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
 		}
 	}
 

@@ -15,6 +15,7 @@ public abstract class Player {
 	protected ArrayList<Card> seenPeople;
 	protected ArrayList<Card> seenRooms; // might not be necessary
 	protected ArrayList<Card> seenWeapons;
+	protected boolean turnOver;
 	
 	public Player(String playerName, Color color, int row, int column) {
 		super();
@@ -26,8 +27,10 @@ public abstract class Player {
 		seenRooms = new ArrayList<Card>();
 		seenWeapons = new ArrayList<Card>();
 		hand = new ArrayList<Card>();
+		
+		turnOver = true;
 	}
-	
+
 	public Card disproveSuggestion(Solution suggestion){
 		ArrayList<Card> similarCards = new ArrayList<Card>();
 		
@@ -100,6 +103,14 @@ public abstract class Player {
 	
 	public Color getColor() {
 		return color;
+	}
+	
+	public boolean isTurnOver() {
+		return turnOver;
+	}
+
+	public void setTurnOver(boolean turnOver) {
+		this.turnOver = turnOver;
 	}
 	
 	public void setLocation(BoardCell newLocation){

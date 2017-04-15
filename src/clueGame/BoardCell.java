@@ -88,7 +88,7 @@ public class BoardCell {
 		g.setColor(Color.BLACK);
 		g.drawRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE); 
 		if (highlight){
-			g.setColor(Color.RED);
+			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(col*CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE);
 		} else {
 			g.setColor(Color.gray);

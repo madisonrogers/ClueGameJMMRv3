@@ -27,7 +27,6 @@ public class GUI extends JFrame {
 	
 	private int currentPlayerIndex;
 	private int dieRoll;
-	private boolean playerTurnOver;
 	
 	private DetectiveNotes detectiveNotes;
 	
@@ -42,7 +41,6 @@ public class GUI extends JFrame {
 		setJMenuBar(menuBar);
 		
 		currentPlayerIndex = 0;
-		playerTurnOver = true;
 		
 		board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
@@ -95,7 +93,6 @@ public class GUI extends JFrame {
 	}
 	
 	public void runGame(int playerIndex){
-		playerTurnOver = false;
 		Card suggestionResult = null;
 		Solution suggestion = null;
 		
@@ -112,10 +109,7 @@ public class GUI extends JFrame {
 
 		repaint();
 		
-		currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
-		
-		playerTurnOver = false;
-		
+		currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();		
 	}
 
 	public static void main(String[] args){
@@ -215,7 +209,9 @@ public class GUI extends JFrame {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
 			guessField.setText(guess.toString());
-			resultField.setText(result.getCardName());
+			if (resultField != null){
+				resultField.setText(result.getCardName());
+			} else resultField.setText(""); // should be empty if no one can disprove
 		}
 		
 		// overloaded update function
@@ -226,26 +222,7 @@ public class GUI extends JFrame {
 		private class ButtonListener implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!playerTurnOver){
-//					JDialog playerNotOver = new JDialog();
-//					playerNotOver.setLayout(new GridLayout(2,1));
-//					playerNotOver.setSize(300, 100);
-//					playerNotOver.setTitle("Error");
-//					JLabel error = new JLabel("You didn't finish your turn!");
-//					error.setSize(30,30);
-//					JButton ok = new JButton("OK!");
-//					
-//					class ExitItemListener implements ActionListener {
-//						public void actionPerformed(ActionEvent e)
-//						{
-//							playerNotOver.setVisible(false);
-//						}
-//					}
-//					ok.addActionListener(new ExitItemListener());
-//					
-//					playerNotOver.add(error);
-//					playerNotOver.add(ok);
-//					playerNotOver.setVisible(true);
+				if (!board.getPlayers().get(currentPlayerIndex).isTurnOver()){
 					JOptionPane.showMessageDialog(null, "The current player's turn isn't over!", "Turn not over", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					runGame(currentPlayerIndex);
