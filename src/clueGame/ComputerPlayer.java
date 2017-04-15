@@ -17,6 +17,9 @@ public class ComputerPlayer extends Player {
 	
 	public void makeMove(Set<BoardCell> targets){
 		BoardCell endLocation = selectTarget(targets);
+		for (BoardCell target : targets){
+			target.setHighlight(false);
+		}
 		this.setLocation(endLocation);
 		turnOver = true;
 	}

@@ -445,6 +445,7 @@ public class Board extends JPanel{
 		}
 		repaint();
 
+		System.out.println(targets);
 		activePlayer.makeMove(targets);
 		targets.clear();
 

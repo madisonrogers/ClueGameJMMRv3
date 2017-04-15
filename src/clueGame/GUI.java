@@ -24,47 +24,47 @@ public class GUI extends JFrame {
 	public static final int FRAME_WIDTH = 780;
 	public static final int FRAME_HEIGHT = 800;
 	private static JMenuBar menuBar;
-	
+
 	private int currentPlayerIndex;
 	private int dieRoll;
-	
+
 	private DetectiveNotes detectiveNotes;
-	
+
 	public static Board board;
 	private ControlGUI infoPanel;	
 	private HandPanel myCards;
-	
+
 	public GUI(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		menuBar();
 		setJMenuBar(menuBar);
-		
+
 		currentPlayerIndex = -1;
-		
+
 		board = Board.getInstance();
 		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
-//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
+		//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
-		
+
 		add(board, BorderLayout.CENTER);
-		
+
 		// instance of ControlGUI class
 		infoPanel = new ControlGUI();
 		add(infoPanel, BorderLayout.SOUTH);	
-		
+
 		// instance of HandPanel class
 		myCards = new HandPanel(board.getHumanPlayer().getHand());
 		add(myCards, BorderLayout.EAST);
 	}
-	
+
 	public void menuBar(){
 		menuBar = new JMenuBar();
 		menuBar.add(createNotesMenu());
 		menuBar.add(createExitItem());
 	}
-	
+
 	private JMenuItem createNotesMenu()
 	{
 		JMenuItem notes = new JMenuItem("Notes"); 
@@ -76,7 +76,7 @@ public class GUI extends JFrame {
 		});
 		return notes;
 	}
-	
+
 	private JMenuItem createExitItem()
 	{
 		JMenuItem item = new JMenuItem("Exit");
@@ -90,16 +90,16 @@ public class GUI extends JFrame {
 
 		return item;
 	}
-	
+
 	public void runGame(int playerIndex){
 		Card suggestionResult = null;
 		Solution suggestion = null;
-		
+
 		dieRoll = new Random().nextInt(6) + 1;
-		
-//		if (!board.getPlayers().get(currentPlayerIndex).isTurnOver()){
-			suggestion = board.runGame(playerIndex, dieRoll);
-//		}
+
+		suggestion = board.runGame(playerIndex, dieRoll);
+
+		infoPanel.updateWhoseTurn(board.getPlayers().get(playerIndex).getPlayerName());
 		
 		if (suggestion != null){
 			suggestionResult = board.handleSuggestion(playerIndex, suggestion);
@@ -114,18 +114,19 @@ public class GUI extends JFrame {
 	public static void main(String[] args){
 		GUI gui = new GUI();
 		gui.setVisible(true);
-		
+
 		// Splash screen on startup
 		Player human = board.getHumanPlayer();
 		JOptionPane.showMessageDialog(gui, "You are " + human.getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+
 	// Put this in here to access board when NextPlayer button is pressed
 	public class ControlGUI extends JPanel {
 		JTextField rollField;
 		JTextField guessField;
 		JTextField resultField;
-		
+		JTextField turnField;
+
 		public ControlGUI() {
 			setLayout(new BorderLayout());
 			JPanel infoPanel = createInfoPanel();// fix this hoe
@@ -150,7 +151,7 @@ public class GUI extends JFrame {
 			JPanel turnPanel = new JPanel();
 			JLabel whoseTurn = new JLabel("Whose turn?");
 			whoseTurn.setHorizontalAlignment(JLabel.RIGHT);
-			JTextField turnField = new JTextField(10);
+			turnField = new JTextField(10);
 			turnField.setEditable(false);
 			turnPanel.add(whoseTurn);
 			turnPanel.add(turnField);
@@ -203,33 +204,37 @@ public class GUI extends JFrame {
 			panel.add(resultPanel);
 			return panel;
 		}	
-		
+
 		public void updateInfoPanel(Integer dieRoll, Solution guess, Card result) {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
 			guessField.setText(guess.toString());
 			if (resultField != null){ // FIXME: make this work
-//				resultField.setText(result.getCardName());
+				//				resultField.setText(result.getCardName());
 			} else resultField.setText(""); // should be empty if no one can disprove
 		}
-		
+
 		// overloaded update function
 		public void updateInfoPanel(Integer dieRoll) {
 			rollField.setText(dieRoll.toString());
 		}
-		
+
+		public void updateWhoseTurn(String player){
+			turnField.setText(player);
+		}
+
 		private class ButtonListener implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// if current player's turn is over, increment index
-								
+
 				if (currentPlayerIndex >= 0 && !board.getPlayers().get(currentPlayerIndex).isTurnOver()){
 					JOptionPane.showMessageDialog(null, "The current player's turn isn't over!", "Turn not over", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
 					runGame(currentPlayerIndex);
-//					if (board.getPlayers().get(currentPlayerIndex).isTurnOver()){
-//					}
+					//					if (board.getPlayers().get(currentPlayerIndex).isTurnOver()){
+					//					}
 				}
 			}
 		}
