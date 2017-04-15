@@ -24,17 +24,20 @@ public class GUI extends JFrame {
 	public static final int FRAME_WIDTH = 780;
 	public static final int FRAME_HEIGHT = 800;
 	private static JMenuBar menuBar;
-	private DetectiveNotes dialog;
-	public static Board board;
+	
 	private int currentPlayerIndex;
 	private int dieRoll;
-	private ControlGUI infoPanel;
 	private boolean playerTurnOver;
+	
+	private DetectiveNotes detectiveNotes;
+	
+	public static Board board;
+	private ControlGUI infoPanel;	
+	private HandPanel myCards;
 	
 	public GUI(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-		
 		menuBar();
 		setJMenuBar(menuBar);
 		
@@ -46,13 +49,15 @@ public class GUI extends JFrame {
 //		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
-		// TODO: add splash screen display
-		add(board, BorderLayout.CENTER);
-		// make instance of class
-		infoPanel = new ControlGUI();
-		add(infoPanel, BorderLayout.SOUTH); // add to frame FIXME: CHANGE TO BOTTOM WHEN WE IMPLEMENT THE REST	
 		
-		HandPanel myCards = new HandPanel(board.getHumanPlayer().getHand());
+		add(board, BorderLayout.CENTER);
+		
+		// instance of ControlGUI class
+		infoPanel = new ControlGUI();
+		add(infoPanel, BorderLayout.SOUTH);	
+		
+		// instance of HandPanel class
+		myCards = new HandPanel(board.getHumanPlayer().getHand());
 		add(myCards, BorderLayout.EAST);
 	}
 	
@@ -67,8 +72,8 @@ public class GUI extends JFrame {
 		JMenuItem notes = new JMenuItem("Notes"); 
 		notes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dialog = new DetectiveNotes();
-				dialog.setVisible(true);
+				detectiveNotes = new DetectiveNotes();
+				detectiveNotes.setVisible(true);
 				System.out.println("Print me");				
 			}
 		});
@@ -94,23 +99,15 @@ public class GUI extends JFrame {
 		Card suggestionResult = null;
 		Solution suggestion = null;
 		
-		Player activePlayer = board.getPlayers().get(playerIndex);
 		dieRoll = new Random().nextInt(6) + 1;
-		board.calcTargets(activePlayer.getRow(), activePlayer.getColumn(), dieRoll);
-
-		for (BoardCell cell : board.getTargets()){
-			cell.setHighlight(true);
-		}
-		System.out.println(dieRoll);
-		repaint();
-		activePlayer.makeMove(board.getTargets());
-
-		if (board.getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
-			suggestion = activePlayer.movedToRoom(board.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), board.getPlayerCards(), board.getWeaponCards(), board.getLegend());
-			suggestionResult = board.handleSuggestion(board.getPlayers().indexOf(activePlayer), suggestion);
+		
+		suggestion = board.runGame(playerIndex, dieRoll);
+		
+		if (suggestion != null){
+			suggestionResult = board.handleSuggestion(playerIndex, suggestion);
 			infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
 		} else {
-			// add overloaded function 
+			infoPanel.updateInfoPanel(dieRoll); 
 		}
 
 		repaint();
@@ -130,6 +127,7 @@ public class GUI extends JFrame {
 		JOptionPane.showMessageDialog(gui, "You are " + human.getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
+	// Put this in here to access board when NextPlayer button is pressed
 	public class ControlGUI extends JPanel {
 		JTextField rollField;
 		JTextField guessField;
@@ -140,6 +138,7 @@ public class GUI extends JFrame {
 			JPanel infoPanel = createInfoPanel();// fix this hoe
 			add(infoPanel, BorderLayout.NORTH);		
 		}
+
 
 		public JPanel createInfoPanel(){
 			JPanel panel = new JPanel();
@@ -215,38 +214,42 @@ public class GUI extends JFrame {
 		public void updateInfoPanel(Integer dieRoll, Solution guess, Card result) {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
-//			guessField.setText(guess.toString());
-//			resultField.setText(result.getCardName());
+			guessField.setText(guess.toString());
+			resultField.setText(result.getCardName());
+		}
+		
+		// overloaded update function
+		public void updateInfoPanel(Integer dieRoll) {
+			rollField.setText(dieRoll.toString());
 		}
 		
 		private class ButtonListener implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (!playerTurnOver){
-					System.out.println("Made it");
-					JDialog playerNotOver = new JDialog();
-					playerNotOver.setLayout(new GridLayout(2,1));
-					playerNotOver.setSize(300, 100);
-					playerNotOver.setTitle("Error");
-					JLabel error = new JLabel("You didn't finish your turn!");
-					error.setSize(30,30);
-					JButton ok = new JButton("OK!");
-					
-					class ExitItemListener implements ActionListener {
-						public void actionPerformed(ActionEvent e)
-						{
-							playerNotOver.setVisible(false);
-						}
-					}
-					ok.addActionListener(new ExitItemListener());
-					
-					playerNotOver.add(error);
-					playerNotOver.add(ok);
-					playerNotOver.setVisible(true);
+//					JDialog playerNotOver = new JDialog();
+//					playerNotOver.setLayout(new GridLayout(2,1));
+//					playerNotOver.setSize(300, 100);
+//					playerNotOver.setTitle("Error");
+//					JLabel error = new JLabel("You didn't finish your turn!");
+//					error.setSize(30,30);
+//					JButton ok = new JButton("OK!");
+//					
+//					class ExitItemListener implements ActionListener {
+//						public void actionPerformed(ActionEvent e)
+//						{
+//							playerNotOver.setVisible(false);
+//						}
+//					}
+//					ok.addActionListener(new ExitItemListener());
+//					
+//					playerNotOver.add(error);
+//					playerNotOver.add(ok);
+//					playerNotOver.setVisible(true);
+					JOptionPane.showMessageDialog(null, "The current player's turn isn't over!", "Turn not over", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					runGame(currentPlayerIndex);
 				}
-				// gotta check for proper turn error thing
-				
-				runGame(currentPlayerIndex);
 			}
 		}
 	}

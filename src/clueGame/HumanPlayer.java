@@ -15,7 +15,6 @@ public class HumanPlayer extends Player {
 	public void makeMove(Set<BoardCell> targets){
 		
 	}
-	// TODO: add some functionality with the human player
 
 	@Override
 	public Solution movedToRoom(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend) {

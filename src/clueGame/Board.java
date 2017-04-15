@@ -58,6 +58,8 @@ public class Board extends JPanel{
 		roomHasCard = new HashMap<Character, Boolean>();
 		targets = new HashSet<BoardCell>();
 		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
+		
+//		addActionListener(new MouseListener());
 	}
 
 	// this method returns the only Board
@@ -427,26 +429,32 @@ public class Board extends JPanel{
 		return false;
 	}
 
-//	public void runGame(Player activePlayer){
-//		//		solutionGuessed = false;
-//		//		int index = 0; 
-//		//		while (!solutionGuessed){
-//		//		Player activePlayer = players.get(index);
-//		// roll die
-//		int dieRoll = new Random().nextInt(6) + 1;
-//		calcTargets(activePlayer.getColumn(), activePlayer.getRow(), dieRoll);
-//
-//		activePlayer.makeMove(targets);
-//		targets.clear();
-//		repaint();
-//
-//		if (this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
-//			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
-//			handleSuggestion(players.indexOf(activePlayer), suggestion);
-//		}
-////		index = ++index % players.size();
-//		//		}
-//	}
+	public Solution runGame(int activePlayerIndex, int dieRoll){
+		//		solutionGuessed = false;
+		//		int index = 0; 
+		//		while (!solutionGuessed){
+		//		Player activePlayer = players.get(index);
+		// roll die
+		Player activePlayer = players.get(activePlayerIndex);
+		
+		calcTargets(activePlayer.getColumn(), activePlayer.getRow(), dieRoll);
+
+		for (BoardCell cell : targets){
+			cell.setHighlight(true);
+		}
+		repaint();
+		
+		activePlayer.makeMove(targets);
+		targets.clear();
+		
+		// if the player is in a room allow them to make a solution
+		if (getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
+			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
+			return suggestion;
+		}
+		
+		return null;
+	}
 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
