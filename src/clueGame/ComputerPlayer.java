@@ -24,10 +24,6 @@ public class ComputerPlayer extends Player {
 		turnOver = true;
 	}
 	
-	public Solution movedToRoom(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend){
-		return createSuggestion(location, players, weapons, legend);
-	}
-	
 	// smart location picker from targets
 	public BoardCell selectTarget(Set<BoardCell> targets){
 		for (BoardCell cell : targets){
@@ -47,20 +43,19 @@ public class ComputerPlayer extends Player {
 	
 	// this should override the player accusation method
 	public Solution makeAccusation(){
-		// TODO finish this function so it creates correct accusations
-		Solution accusation = new Solution("", "", "");
+		turnOver = true;
 		return accusation;
 	}
 
 	// smart suggestion creator
 	public Solution createSuggestion(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend){
-		ArrayList<Card> validSneople = new ArrayList<Card>(players);
+		ArrayList<Card> validPeople = new ArrayList<Card>(players);
 		ArrayList<Card> validWeapons = new ArrayList<Card>(weapons); 
 
 		for (int i = 0; i < seenPeople.size(); i++){
-			for (int j = 0; j < validSneople.size(); j++){
-				if (validSneople.get(j).getCardName().equals(seenPeople.get(i).getCardName())){
-					validSneople.remove(validSneople.get(j));
+			for (int j = 0; j < validPeople.size(); j++){
+				if (validPeople.get(j).getCardName().equals(seenPeople.get(i).getCardName())){
+					validPeople.remove(validPeople.get(j));
 					break;
 				}
 			}
@@ -73,7 +68,13 @@ public class ComputerPlayer extends Player {
 				}
 			}
 		}
-		return new Solution(validSneople.get(new Random().nextInt(validSneople.size())).getCardName(),
+		
+		System.out.println(validPeople);
+		System.out.println(validWeapons);
+		System.out.println(legend.get(location.getInitial()));
+		
+		
+		return new Solution(validPeople.get(new Random().nextInt(validPeople.size())).getCardName(),
 				legend.get(location.getInitial()), 
 				validWeapons.get(new Random().nextInt(validWeapons.size())).getCardName());
 	}

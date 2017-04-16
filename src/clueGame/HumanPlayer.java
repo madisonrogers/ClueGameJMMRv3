@@ -17,7 +17,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public Solution movedToRoom(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend) {
+	public Solution createSuggestion(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend) {
 		// TODO show dialog for making a suggestion
 		
 		return null;
