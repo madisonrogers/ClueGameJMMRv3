@@ -470,14 +470,14 @@ public class Board extends JPanel{
 
 	public Solution runGame(int activePlayerIndex, int dieRoll){
 		activePlayer = players.get(activePlayerIndex);
-		System.out.println("Computer Player: " + (activePlayer instanceof ComputerPlayer));
-		System.out.println("Last room initial: " + activePlayer.getLastRoom());
+//		System.out.println("Computer Player: " + (activePlayer instanceof ComputerPlayer));
+//		System.out.println("Last room initial: " + activePlayer.getLastRoom());
 
 		// set the last room the computer player was in 
 		if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway())
 		{
 			activePlayer.setLastRoom(getCellAt(activePlayer.getRow(), activePlayer.getColumn()).getInitial());
-			System.out.println(activePlayer.getLastRoom());
+//			System.out.println(activePlayer.getLastRoom());
 		}
 
 		calcTargets(activePlayer.getRow(), activePlayer.getColumn(), dieRoll);
@@ -487,8 +487,8 @@ public class Board extends JPanel{
 		}
 		repaint();
 
-		System.out.println(players.get(activePlayerIndex).getPlayerName());
-		System.out.println(targets);
+//		System.out.println(players.get(activePlayerIndex).getPlayerName());
+//		System.out.println(targets);
 		activePlayer.makeMove(targets);
 		targets.clear();
 

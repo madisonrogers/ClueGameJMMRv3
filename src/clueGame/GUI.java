@@ -39,7 +39,7 @@ public class GUI extends JFrame {
 		setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		menuBar();
 		setJMenuBar(menuBar);
-
+		
 		currentPlayerIndex = -1;
 
 		board = Board.getInstance();
@@ -47,6 +47,8 @@ public class GUI extends JFrame {
 		//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
+		
+		detectiveNotes = new DetectiveNotes();
 
 		add(board, BorderLayout.CENTER);
 
@@ -70,7 +72,6 @@ public class GUI extends JFrame {
 		JMenuItem notes = new JMenuItem("Notes"); 
 		notes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				detectiveNotes = new DetectiveNotes();
 				detectiveNotes.setVisible(true);			
 			}
 		});
