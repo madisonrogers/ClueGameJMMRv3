@@ -369,38 +369,71 @@ public class Board extends JPanel{
 		}
 	}
 
-	public void calcTargets(int x, int y, int pathLength){
-		Set<BoardCell> temp = new HashSet<BoardCell>();
-		BoardCell tempKey = new BoardCell(0,0," ");
-		tempKey = getCellAt(x,y);
-		temp = adjMatrix.get(tempKey);
+//	public void calcTargets(int x, int y, int pathLength){
+//		Set<BoardCell> temp = new HashSet<BoardCell>();
+//		BoardCell tempKey = new BoardCell(0,0," ");
+//		tempKey = getCellAt(x,y);
+//		temp = adjMatrix.get(tempKey);
+//
+//		BoardCell e = new BoardCell(0,0," ");
+//		e = getCellAt(x,y);
+//		visited.add(e);
+//
+//		for(BoardCell current: temp) {
+//			int j = current.getCol();
+//			int i = current.getRow();
+//			if(!visited.contains(getCellAt(i, j))) {
+//				visited.add(current);
+//
+//				if(current.isDoorway()) {
+//					targets.add(current);
+//					visited.remove(current);
+//				}
+//
+//				if(pathLength == 1) {
+//					if(!targets.contains(getCellAt(i, j))) {
+//						targets.add(current);
+//						visited.remove(current);
+//					}
+//				}
+//
+//				else {
+//					calcTargets(current.getRow(), current.getCol(), pathLength -1);
+//				}
+//				visited.remove(current);
+//			}
+//		}
+//	}
+	
+	public void calcTargets(int row, int col, int pathLength){
+		calcTargets(board[row][col], pathLength);
+	}
 
-		BoardCell e = new BoardCell(0,0," ");
-		e = getCellAt(x,y);
-		visited.add(e);
+	public void calcTargets(BoardCell startCell, int pathLength){
+		targets.clear();
+		visited.clear();
 
-		for(BoardCell current: temp) {
-			int j = current.getCol();
-			int i = current.getRow();
-			if(!visited.contains(getCellAt(i, j))) {
-				visited.add(current);
+		visited.add(startCell);
 
-				if(current.isDoorway()) {
-					targets.add(current);
-					visited.remove(current);
+		findAllTgts(startCell, pathLength);
+	}
+
+	//the recursive bit of the target finding algorithm
+	private void findAllTgts(BoardCell start, int dist){
+
+		for(BoardCell cell : adjMatrix.get(start)){ //for each cell next to us
+			if(!visited.contains(cell)){ //only do this if we haven't seen this cell yet
+				visited.add(cell);
+
+				if(dist == 1){ //if we can only move 1 more space, add it to targets
+					targets.add(cell);
+				}else if (cell.isDoorway()){ //if we're not done moving, but it's a door, it's a target
+					targets.add(cell);
+				}else if(dist > 1){ //otherwise, move to that space and keep looking
+					findAllTgts(cell, dist-1);
 				}
 
-				if(pathLength == 1) {
-					if(!targets.contains(getCellAt(i, j))) {
-						targets.add(current);
-						visited.remove(current);
-					}
-				}
-
-				else {
-					calcTargets(current.getRow(), current.getCol(), pathLength -1);
-				}
-				visited.remove(current);
+				visited.remove(cell);
 			}
 		}
 	}
@@ -437,6 +470,15 @@ public class Board extends JPanel{
 
 	public Solution runGame(int activePlayerIndex, int dieRoll){
 		activePlayer = players.get(activePlayerIndex);
+		System.out.println("Computer Player: " + (activePlayer instanceof ComputerPlayer));
+		System.out.println("Last room initial: " + activePlayer.getLastRoom());
+		
+		// set the last room the computer player was in 
+		if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isRoom() && activePlayer instanceof ComputerPlayer)
+		{
+			activePlayer.setLastRoom(getCellAt(activePlayer.getRow(), activePlayer.getColumn()).getInitial());
+			System.out.println(activePlayer.getLastRoom());
+		}
 
 		calcTargets(activePlayer.getRow(), activePlayer.getColumn(), dieRoll);
 
@@ -445,7 +487,8 @@ public class Board extends JPanel{
 		}
 		repaint();
 
-		System.out.println(targets);
+//		System.out.println(players.get(activePlayerIndex).getPlayerName());
+//		System.out.println(targets);
 		activePlayer.makeMove(targets);
 		targets.clear();
 

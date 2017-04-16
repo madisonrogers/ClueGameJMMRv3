@@ -16,6 +16,7 @@ public abstract class Player {
 	protected ArrayList<Card> seenRooms; // might not be necessary
 	protected ArrayList<Card> seenWeapons;
 	protected boolean turnOver;
+	protected char lastRoom;
 	
 	public Player(String playerName, Color color, int row, int column) {
 		super();
@@ -121,5 +122,15 @@ public abstract class Player {
 	@Override
 	public String toString() {
 		return "The " + color + " player, " + playerName + ", is at " + row + ", " + column;
+	}
+
+	public void setLastRoom(char initial) {
+		// TODO Auto-generated method stub
+		this.lastRoom = initial;
+	}
+	
+	public char getLastRoom()
+	{
+		return lastRoom;
 	}
 }

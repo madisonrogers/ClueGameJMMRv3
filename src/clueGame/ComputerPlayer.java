@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class ComputerPlayer extends Player {
 	// keep track of the computer player's last visited room to make movement smart
-	private char lastRoom; 
+	//private char lastRoom; 
 	
 	public ComputerPlayer(String playerName, Color color, int row, int column) {
 		super(playerName, color, row, column);
@@ -31,7 +31,7 @@ public class ComputerPlayer extends Player {
 	// smart location picker from targets
 	public BoardCell selectTarget(Set<BoardCell> targets){
 		for (BoardCell cell : targets){
-			if (cell.isDoorway() && cell.getInitial() != lastRoom){
+			if (cell.isDoorway() && (cell.getInitial() != lastRoom)){
 				return cell;
 			}
 		}
@@ -76,13 +76,5 @@ public class ComputerPlayer extends Player {
 		return new Solution(validSneople.get(new Random().nextInt(validSneople.size())).getCardName(),
 				legend.get(location.getInitial()), 
 				validWeapons.get(new Random().nextInt(validWeapons.size())).getCardName());
-	}
-
-	public char getLastRoom() {
-		return lastRoom;
-	}
-	
-	public void setLastRoom(char lastRoom) {
-		this.lastRoom = lastRoom;
 	}
 }
