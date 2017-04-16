@@ -39,7 +39,7 @@ public class GUI extends JFrame {
 		setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		menuBar();
 		setJMenuBar(menuBar);
-		
+
 		currentPlayerIndex = -1;
 
 		board = Board.getInstance();
@@ -47,7 +47,7 @@ public class GUI extends JFrame {
 		//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
 		board.initialize();
 		board.initializeGameplay();
-		
+
 		detectiveNotes = new DetectiveNotes();
 
 		add(board, BorderLayout.CENTER);
@@ -101,7 +101,7 @@ public class GUI extends JFrame {
 		suggestion = board.runGame(playerIndex, dieRoll);
 
 		infoPanel.updateWhoseTurn(board.getPlayers().get(playerIndex).getPlayerName());
-		
+
 		if (suggestion != null){
 			suggestionResult = board.handleSuggestion(playerIndex, suggestion);
 			infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
@@ -158,8 +158,9 @@ public class GUI extends JFrame {
 			turnPanel.add(turnField);
 
 			JButton nextButton = new JButton("Next player");
-			nextButton.addActionListener(new ButtonListener());
+			nextButton.addActionListener(new NextPlayerButtonListener());
 			JButton accuseButton = new JButton("Make an Accusation");
+			accuseButton.addActionListener(new MakeAccusationButtonListener());
 
 			panel.add(turnPanel);
 			panel.add(nextButton);
@@ -224,7 +225,7 @@ public class GUI extends JFrame {
 			turnField.setText(player);
 		}
 
-		private class ButtonListener implements ActionListener{
+		private class NextPlayerButtonListener implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// if current player's turn is over, increment index
@@ -238,6 +239,36 @@ public class GUI extends JFrame {
 					//					}
 				}
 			}
+		}
+
+		private class MakeAccusationButtonListener implements ActionListener{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// If the current player is the human player and their turn is not over, show the dialog box
+				if(currentPlayerIndex >= 0){
+					Player player = board.getPlayers().get(currentPlayerIndex);
+
+					if(player instanceof HumanPlayer && !player.isTurnOver())
+					{
+						if(!board.getCellAt(player.getColumn(), player.getRow()).isDoorway())
+						{
+							JOptionPane.showMessageDialog(null, "You can not make an accusation because you are not in a room.", "Not in a room", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else
+						{
+							GuessDialog guess = new GuessDialog();
+							guess.setVisible(true);	
+						}
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "It is not your turn!", "Not your turn", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					}
+				}
+			}
+
 		}
 	}
 }
