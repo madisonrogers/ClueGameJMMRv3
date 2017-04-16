@@ -22,7 +22,7 @@ public class Board extends JPanel{
 	public static final int MAX_WEAPONS = 4;
 	public static final int MAX_PLAYERS = 6;
 	public static final int MAX_ROOMS = 9;
-	
+
 
 	private int numRows;
 	private int numCols;
@@ -212,7 +212,7 @@ public class Board extends JPanel{
 			}
 			int row = Integer.parseInt(words[2]);
 			int column = Integer.parseInt(words[3]);
-			
+
 			if (words[4].equalsIgnoreCase("Human")) 
 				players.add(new HumanPlayer(words[0], color, row, column));
 			else 
@@ -369,42 +369,42 @@ public class Board extends JPanel{
 		}
 	}
 
-//	public void calcTargets(int x, int y, int pathLength){
-//		Set<BoardCell> temp = new HashSet<BoardCell>();
-//		BoardCell tempKey = new BoardCell(0,0," ");
-//		tempKey = getCellAt(x,y);
-//		temp = adjMatrix.get(tempKey);
-//
-//		BoardCell e = new BoardCell(0,0," ");
-//		e = getCellAt(x,y);
-//		visited.add(e);
-//
-//		for(BoardCell current: temp) {
-//			int j = current.getCol();
-//			int i = current.getRow();
-//			if(!visited.contains(getCellAt(i, j))) {
-//				visited.add(current);
-//
-//				if(current.isDoorway()) {
-//					targets.add(current);
-//					visited.remove(current);
-//				}
-//
-//				if(pathLength == 1) {
-//					if(!targets.contains(getCellAt(i, j))) {
-//						targets.add(current);
-//						visited.remove(current);
-//					}
-//				}
-//
-//				else {
-//					calcTargets(current.getRow(), current.getCol(), pathLength -1);
-//				}
-//				visited.remove(current);
-//			}
-//		}
-//	}
-	
+	//	public void calcTargets(int x, int y, int pathLength){
+	//		Set<BoardCell> temp = new HashSet<BoardCell>();
+	//		BoardCell tempKey = new BoardCell(0,0," ");
+	//		tempKey = getCellAt(x,y);
+	//		temp = adjMatrix.get(tempKey);
+	//
+	//		BoardCell e = new BoardCell(0,0," ");
+	//		e = getCellAt(x,y);
+	//		visited.add(e);
+	//
+	//		for(BoardCell current: temp) {
+	//			int j = current.getCol();
+	//			int i = current.getRow();
+	//			if(!visited.contains(getCellAt(i, j))) {
+	//				visited.add(current);
+	//
+	//				if(current.isDoorway()) {
+	//					targets.add(current);
+	//					visited.remove(current);
+	//				}
+	//
+	//				if(pathLength == 1) {
+	//					if(!targets.contains(getCellAt(i, j))) {
+	//						targets.add(current);
+	//						visited.remove(current);
+	//					}
+	//				}
+	//
+	//				else {
+	//					calcTargets(current.getRow(), current.getCol(), pathLength -1);
+	//				}
+	//				visited.remove(current);
+	//			}
+	//		}
+	//	}
+
 	public void calcTargets(int row, int col, int pathLength){
 		calcTargets(board[row][col], pathLength);
 	}
@@ -472,9 +472,9 @@ public class Board extends JPanel{
 		activePlayer = players.get(activePlayerIndex);
 		System.out.println("Computer Player: " + (activePlayer instanceof ComputerPlayer));
 		System.out.println("Last room initial: " + activePlayer.getLastRoom());
-		
+
 		// set the last room the computer player was in 
-		if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isRoom() && activePlayer instanceof ComputerPlayer)
+		if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway())
 		{
 			activePlayer.setLastRoom(getCellAt(activePlayer.getRow(), activePlayer.getColumn()).getInitial());
 			System.out.println(activePlayer.getLastRoom());
@@ -487,16 +487,16 @@ public class Board extends JPanel{
 		}
 		repaint();
 
-//		System.out.println(players.get(activePlayerIndex).getPlayerName());
-//		System.out.println(targets);
+		System.out.println(players.get(activePlayerIndex).getPlayerName());
+		System.out.println(targets);
 		activePlayer.makeMove(targets);
 		targets.clear();
 
-		// if the player is in a room allow them to make a solution
-		if (getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
-			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
-			return suggestion;
-		}
+//		// if the player is in a room allow them to make a solution
+//		if (getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
+//			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
+//			return suggestion;
+//		}
 
 		return null;
 	}
@@ -532,7 +532,7 @@ public class Board extends JPanel{
 			int y = e.getY();
 			int row = (int) Math.floor(y/CELL_SIZE);
 			int column = (int) Math.floor(x/CELL_SIZE);
-			
+
 			boolean invalidClick = false;
 
 			// throw error pane if it isn't the players turn
@@ -547,7 +547,7 @@ public class Board extends JPanel{
 						} else { // clicked on a highlighted target
 							activePlayer.setTurnOver(true);
 							activePlayer.setLocation(cell);
-							
+
 							if (cell.isRoom()){
 								// TODO: add dialog to make suggestion
 							}
