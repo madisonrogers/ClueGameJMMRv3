@@ -441,23 +441,77 @@ public class Board extends JPanel{
 	public Card handleSuggestion(int indexOfPlayer, Solution suggestion) {
 		// creates new list of players in the correct order to play. Starting with the current player up to one before the current player
 		// for example, current player = 2, 3,4,5,0,1
-		ArrayList<Player> playersInOrder = new ArrayList<>();
+		//		ArrayList<Player> playersInOrder = new ArrayList<>();
+		//
+		//		for (int i = indexOfPlayer+1; i < players.size(); i++) {
+		//			playersInOrder.add(players.get(i));
+		//		}
+		//		for (int i = 0; i < indexOfPlayer; i++) {
+		//			playersInOrder.add(players.get(i));
+		//		}
+		//
+		//		for(int i = 0; i < playersInOrder.size(); i++) {
+		//			Player p = playersInOrder.get(i);
+		//
+		//			if (null != p.disproveSuggestion(suggestion)){
+		//				return p.disproveSuggestion(suggestion);
+		//			}
+		//
+		//		}
+		//		return null;
 
-		for (int i = indexOfPlayer+1; i < players.size(); i++) {
-			playersInOrder.add(players.get(i));
-		}
-		for (int i = 0; i < indexOfPlayer; i++) {
-			playersInOrder.add(players.get(i));
-		}
-
-		for(int i = 0; i < playersInOrder.size(); i++) {
-			Player p = playersInOrder.get(i);
-
-			if (null != p.disproveSuggestion(suggestion)){
-				return p.disproveSuggestion(suggestion);
+		Card disproveCard = new Card("", CardType.PERSON);
+		for (int i = 0; i < indexOfPlayer; i++){
+			if (players.get(i).disproveSuggestion(suggestion) != null){
+				disproveCard = players.get(i).disproveSuggestion(suggestion);
+				if (disproveCard.getType() == CardType.PERSON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenPeople(disproveCard);
+					}
+				} else if (disproveCard.getType() == CardType.WEAPON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenWeapons(disproveCard);
+					}
+				} else {
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenRooms(disproveCard);
+					}
+				}
+				return disproveCard;
 			}
-
 		}
+		for (int i = indexOfPlayer + 1; i < players.size(); i++){
+			if (players.get(i).disproveSuggestion(suggestion) != null){
+				disproveCard = players.get(i).disproveSuggestion(suggestion);
+				if (disproveCard.getType() == CardType.PERSON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenPeople(disproveCard);
+					}
+				} else if (disproveCard.getType() == CardType.WEAPON){
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenWeapons(disproveCard);
+					}
+				} else {
+					for (int j = 0; j < players.size(); j++){
+						if (j == i) continue; // don't add seenCard if in hand
+						players.get(j).addToSeenRooms(disproveCard);
+					}
+				}
+				return disproveCard;
+			}
+		}
+
+		for (Player player : players){
+			if (player.disproveSuggestion(suggestion) == null){
+				player.setShouldAccuse(true, suggestion);
+			}
+		}
+
 		return null;
 	}
 
@@ -470,14 +524,11 @@ public class Board extends JPanel{
 
 	public Solution runGame(int activePlayerIndex, int dieRoll){
 		activePlayer = players.get(activePlayerIndex);
-//		System.out.println("Computer Player: " + (activePlayer instanceof ComputerPlayer));
-//		System.out.println("Last room initial: " + activePlayer.getLastRoom());
 
 		// set the last room the computer player was in 
 		if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway())
 		{
 			activePlayer.setLastRoom(getCellAt(activePlayer.getRow(), activePlayer.getColumn()).getInitial());
-//			System.out.println(activePlayer.getLastRoom());
 		}
 
 		calcTargets(activePlayer.getRow(), activePlayer.getColumn(), dieRoll);
@@ -487,16 +538,21 @@ public class Board extends JPanel{
 		}
 		repaint();
 
-//		System.out.println(players.get(activePlayerIndex).getPlayerName());
-//		System.out.println(targets);
-		activePlayer.makeMove(targets);
-		targets.clear();
+		if (activePlayer.isShouldAccuse() && activePlayer instanceof ComputerPlayer && 
+				legend.get(getCellAt(activePlayer.getRow(), activePlayer.getColumn()).getInitial()).equals(activePlayer.getAccusation().room)) {
+			((ComputerPlayer) activePlayer).makeAccusation(); 
+		}
+		else {
+			activePlayer.makeMove(targets);
 
-//		// if the player is in a room allow them to make a solution
-//		if (getCellAt(activePlayer.getColumn(), activePlayer.getRow()).isRoom()){
-//			Solution suggestion = activePlayer.movedToRoom(this.getCellAt(activePlayer.getColumn(), activePlayer.getRow()), playerCards, weaponCards, legend);
-//			return suggestion;
-//		}
+			// if the player is in a room allow them to make a solution
+			if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway()){
+				Solution suggestion = activePlayer.createSuggestion(this.getCellAt(activePlayer.getRow(), activePlayer.getColumn()), playerCards, weaponCards, legend);
+				// TODO: move the suggested player into room
+				return suggestion;
+			}
+		}
+		targets.clear();
 
 		return null;
 	}

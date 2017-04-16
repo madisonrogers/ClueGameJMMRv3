@@ -17,6 +17,8 @@ public abstract class Player {
 	protected ArrayList<Card> seenWeapons;
 	protected boolean turnOver;
 	protected char lastRoom;
+	protected boolean shouldAccuse;
+	protected Solution accusation;
 	
 	public Player(String playerName, Color color, int row, int column) {
 		super();
@@ -30,6 +32,8 @@ public abstract class Player {
 		hand = new ArrayList<Card>();
 		
 		turnOver = false;
+		shouldAccuse = false;
+		accusation = new Solution("", "", "");
 	}
 
 	public Card disproveSuggestion(Solution suggestion){
@@ -58,7 +62,7 @@ public abstract class Player {
 	
 	public abstract void makeMove(Set<BoardCell> targets);
 	
-	public abstract Solution movedToRoom(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend);
+	public abstract Solution createSuggestion(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend);
 	
 	public Graphics draw(Graphics g){
 		g.setColor(color);
@@ -108,6 +112,21 @@ public abstract class Player {
 	
 	public boolean isTurnOver() {
 		return turnOver;
+	}
+	
+	public boolean isShouldAccuse() {
+		return shouldAccuse;
+	}
+
+	public Solution getAccusation() {
+		return accusation;
+	}
+
+	public void setShouldAccuse(boolean shouldAccuse, Solution accusation) {
+		this.shouldAccuse = shouldAccuse; 
+		
+		// this is what they player should accuse
+		this.accusation = accusation;
 	}
 
 	public void setTurnOver(boolean turnOver) {

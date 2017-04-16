@@ -104,7 +104,11 @@ public class GUI extends JFrame {
 		
 		if (suggestion != null){
 			suggestionResult = board.handleSuggestion(playerIndex, suggestion);
-			infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
+			if (suggestionResult != null){
+				infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);				
+			} else {
+				infoPanel.updateInfoPanel(dieRoll, suggestion);
+			}
 		} else {
 			infoPanel.updateInfoPanel(dieRoll); 
 		}
@@ -130,10 +134,9 @@ public class GUI extends JFrame {
 
 		public ControlGUI() {
 			setLayout(new BorderLayout());
-			JPanel infoPanel = createInfoPanel();// fix this hoe
+			JPanel infoPanel = createInfoPanel();
 			add(infoPanel, BorderLayout.NORTH);		
 		}
-
 
 		public JPanel createInfoPanel(){
 			JPanel panel = new JPanel();
@@ -210,9 +213,16 @@ public class GUI extends JFrame {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
 			guessField.setText(guess.toString());
-			if (resultField != null){ // FIXME: make this work
-				//				resultField.setText(result.getCardName());
+			if (result != null){ // FIXME: make this work
+								resultField.setText(result.getCardName());
 			} else resultField.setText(""); // should be empty if no one can disprove
+		}
+		
+		public void updateInfoPanel(Integer dieRoll, Solution guess) {
+			rollField.setText(dieRoll.toString());
+			// only update when can make a guess
+			guessField.setText(guess.toString());
+			resultField.setText(""); // should be empty if no one can disprove
 		}
 
 		// overloaded update function
@@ -228,14 +238,11 @@ public class GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// if current player's turn is over, increment index
-
 				if (currentPlayerIndex >= 0 && !board.getPlayers().get(currentPlayerIndex).isTurnOver()){
 					JOptionPane.showMessageDialog(null, "The current player's turn isn't over!", "Turn not over", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
 					runGame(currentPlayerIndex);
-					//					if (board.getPlayers().get(currentPlayerIndex).isTurnOver()){
-					//					}
 				}
 			}
 		}
