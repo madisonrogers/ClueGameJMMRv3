@@ -101,6 +101,7 @@ public class GUI extends JFrame {
 		infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
 		
 		suggestion = board.runGame(playerIndex, dieRoll);
+		if (playerIndex == 0) suggestion = ((HumanPlayer) board.getHumanPlayer()).getSuggestion();
 
 		infoPanel.updateWhoseTurn(board.getPlayers().get(playerIndex).getPlayerName());
 

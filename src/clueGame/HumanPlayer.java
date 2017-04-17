@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class HumanPlayer extends Player {
+	private Solution suggestion;
 
 	public HumanPlayer(String playerName, Color color, int row, int column) {
 		super(playerName, color, row, column);
@@ -18,11 +19,14 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public Solution createSuggestion(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend) {
-		// TODO show dialog for making a suggestion
-		
+		System.out.println("Made it----");
 		GuessDialog suggestionBox = new GuessDialog(true);
-		
+		suggestion = suggestionBox.getSolution();
 		return suggestionBox.getSolution();
+	}
+
+	public Solution getSuggestion() {
+		return suggestion;
 	}
 	
 }

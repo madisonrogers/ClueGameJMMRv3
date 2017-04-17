@@ -546,7 +546,7 @@ public class Board extends JPanel{
 			activePlayer.makeMove(targets);
 
 			// if the player is in a room allow them to make a solution
-			if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway()){
+			if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway() && activePlayer instanceof ComputerPlayer){
 				Solution suggestion = activePlayer.createSuggestion(this.getCellAt(activePlayer.getRow(), activePlayer.getColumn()), playerCards, weaponCards, legend);
 				// TODO: move the suggested player into room
 				return suggestion;
@@ -589,6 +589,7 @@ public class Board extends JPanel{
 			int row = (int) Math.floor(y/CELL_SIZE);
 			int column = (int) Math.floor(x/CELL_SIZE);
 
+			boolean showDialog = false;
 			boolean invalidClick = false;
 
 			// throw error pane if it isn't the players turn
@@ -604,8 +605,8 @@ public class Board extends JPanel{
 							activePlayer.setTurnOver(true);
 							activePlayer.setLocation(cell);
 
-							if (cell.isRoom()){
-								// TODO: add dialog to make suggestion
+							if (cell.isDoorway()){
+								showDialog = true;
 							}
 						}
 					}
@@ -621,6 +622,8 @@ public class Board extends JPanel{
 				}
 				repaint();
 			}
+			// bring up suggestion dialog box
+			if (showDialog)	activePlayer.createSuggestion(null, null, null, null);
 		}
 
 		@Override
