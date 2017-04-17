@@ -97,7 +97,9 @@ public class GUI extends JFrame {
 		Solution suggestion = null;
 
 		dieRoll = new Random().nextInt(6) + 1;
-
+		
+		infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
+		
 		suggestion = board.runGame(playerIndex, dieRoll);
 
 		infoPanel.updateWhoseTurn(board.getPlayers().get(playerIndex).getPlayerName());
@@ -213,7 +215,11 @@ public class GUI extends JFrame {
 		public void updateInfoPanel(Integer dieRoll, Solution guess, Card result) {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
-			guessField.setText(guess.toString());
+			if (guess != null){
+				guessField.setText(guess.toString());
+			} else {
+				guessField.setText("");
+			}
 			if (result != null){ // FIXME: make this work
 								resultField.setText(result.getCardName());
 			} else resultField.setText(""); // should be empty if no one can disprove
@@ -222,7 +228,11 @@ public class GUI extends JFrame {
 		public void updateInfoPanel(Integer dieRoll, Solution guess) {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
-			guessField.setText(guess.toString());
+			if (guess != null){
+				guessField.setText(guess.toString());
+			} else {
+				guessField.setText("");
+			}
 			resultField.setText(""); // should be empty if no one can disprove
 		}
 
@@ -258,14 +268,14 @@ public class GUI extends JFrame {
 
 					if(player instanceof HumanPlayer && !player.isTurnOver())
 					{
-						if(board.getCellAt(player.getRow(), player.getColumn()).isDoorway())
+						if(!board.getCellAt(player.getColumn(), player.getRow()).isDoorway())
 						{
-							GuessDialog guess = new GuessDialog();
-							guess.setVisible(true);
+							JOptionPane.showMessageDialog(null, "You can not make an accusation because you are not in a room.", "Not in a room", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else
 						{
-							JOptionPane.showMessageDialog(null, "You can not make an accusation because you are not in a room.", "Not in a room", JOptionPane.INFORMATION_MESSAGE);	
+							GuessDialog guess = new GuessDialog();
+							guess.setVisible(true);	
 						}
 					}
 					else
