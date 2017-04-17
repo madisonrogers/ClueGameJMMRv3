@@ -260,7 +260,7 @@ public class GUI extends JFrame {
 					{
 						if(board.getCellAt(player.getRow(), player.getColumn()).isDoorway())
 						{
-							GuessDialog guess = new GuessDialog();
+							GuessDialog guess = new GuessDialog(false);
 							guess.setVisible(true);
 						}
 						else

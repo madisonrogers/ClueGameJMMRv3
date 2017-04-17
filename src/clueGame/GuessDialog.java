@@ -20,26 +20,63 @@ public class GuessDialog extends JDialog{
 	
 	private Board board = Board.getInstance();
 	private Room room;
+	private RoomGuess roomGuess;
 	private Person person;
 	private Weapon weapon;
 	private Buttons buttons;
+	private boolean suggestion;
 	
-	public GuessDialog() {
+	public Solution getSolution()
+	{
+		String room;
+		String person = this.person.getName();
+		String weapon = this.weapon.getName();
+		
+		if(suggestion)
+		{
+			room = this.room.getName();
+		}
+		else
+		{
+			room = roomGuess.getName();
+		}
+		
+		Solution solution = new Solution(person, room, weapon);
+		
+		return solution;
+		
+	}
+
+	public GuessDialog(boolean suggestion) {
 		// TODO Auto-generated constructor stub
 		setModal(true);
 		setTitle("Make a Guess");
 		setSize(300,300);
 		setLayout(new GridLayout(4,1));
 		
-		room = new Room();
+		this.suggestion = suggestion;
+		
+		if(suggestion)
+		{
+			room = new Room();	
+			add(room);
+		}
+		else
+		{
+			roomGuess = new RoomGuess();
+			add(roomGuess);
+		}
+		
 		person = new Person();
 		weapon = new Weapon();
 		buttons = new Buttons();
 		
-		add(room);
+		//add(room);
 		add(person);
 		add(weapon);
 		add(buttons);
+		
+		setVisible(true);
 	}
 	
 	public class Room extends JPanel
@@ -53,6 +90,22 @@ public class GuessDialog extends JDialog{
 			currentRoom.setText(board.getLegend().get(board.getCellAt(board.getHumanPlayer().getRow(), board.getHumanPlayer().getColumn()).getInitial()));
 		
 			add(currentRoom);
+		}
+	}
+	
+	public class RoomGuess extends JPanel {
+		private JComboBox<String> guess = new JComboBox<String>();
+		private ArrayList<String> rooms = board.getRooms();
+
+		public RoomGuess() {
+		
+			for(String room : rooms)
+			{
+				guess.addItem(room);
+			}
+			
+			add(guess);
+			setBorder(new TitledBorder(new EtchedBorder(), "Room"));
 		}
 	}
 	
