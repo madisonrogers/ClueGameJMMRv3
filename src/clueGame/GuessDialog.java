@@ -102,26 +102,28 @@ public class GuessDialog extends JDialog{
 			add(cancel);
 		}
 		
-		public class SubmitButtonListener implements ActionListener
-		{
+		
+	}
+	
+	public class SubmitButtonListener implements ActionListener
+	{
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
 			
 		}
 		
-		public class CancelButtonListener implements ActionListener
-		{
+	}
+	
+	public class CancelButtonListener implements ActionListener
+	{
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				setVisible(false);
-			}
-			
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			setVisible(false);
 		}
+		
 	}
 }
