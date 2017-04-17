@@ -20,7 +20,9 @@ public class HumanPlayer extends Player {
 	public Solution createSuggestion(BoardCell location, ArrayList<Card> players, ArrayList<Card> weapons, Map<Character, String> legend) {
 		// TODO show dialog for making a suggestion
 		
-		return null;
+		GuessDialog suggestionBox = new GuessDialog(true);
+		
+		return suggestionBox.getSolution();
 	}
 	
 }
