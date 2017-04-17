@@ -69,9 +69,9 @@ public class ComputerPlayer extends Player {
 			}
 		}
 		
-		System.out.println(validPeople);
-		System.out.println(validWeapons);
-		System.out.println(legend.get(location.getInitial()));
+//		System.out.println(validPeople);
+//		System.out.println(validWeapons);
+//		System.out.println(legend.get(location.getInitial()));
 		
 		
 		return new Solution(validPeople.get(new Random().nextInt(validPeople.size())).getCardName(),

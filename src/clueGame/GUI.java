@@ -258,14 +258,14 @@ public class GUI extends JFrame {
 
 					if(player instanceof HumanPlayer && !player.isTurnOver())
 					{
-						if(!board.getCellAt(player.getColumn(), player.getRow()).isDoorway())
+						if(board.getCellAt(player.getRow(), player.getColumn()).isDoorway())
 						{
-							JOptionPane.showMessageDialog(null, "You can not make an accusation because you are not in a room.", "Not in a room", JOptionPane.INFORMATION_MESSAGE);
+							GuessDialog guess = new GuessDialog();
+							guess.setVisible(true);
 						}
 						else
 						{
-							GuessDialog guess = new GuessDialog();
-							guess.setVisible(true);	
+							JOptionPane.showMessageDialog(null, "You can not make an accusation because you are not in a room.", "Not in a room", JOptionPane.INFORMATION_MESSAGE);	
 						}
 					}
 					else
