@@ -97,9 +97,9 @@ public class GUI extends JFrame {
 		Solution suggestion = null;
 
 		dieRoll = new Random().nextInt(6) + 1;
-		
+
 		infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
-		
+
 		suggestion = board.runGame(playerIndex, dieRoll);
 		if (playerIndex == 0) suggestion = ((HumanPlayer) board.getHumanPlayer()).getSuggestion();
 
@@ -222,10 +222,10 @@ public class GUI extends JFrame {
 				guessField.setText("");
 			}
 			if (result != null){ // FIXME: make this work
-								resultField.setText(result.getCardName());
+				resultField.setText(result.getCardName());
 			} else resultField.setText(""); // should be empty if no one can disprove
 		}
-		
+
 		public void updateInfoPanel(Integer dieRoll, Solution guess) {
 			rollField.setText(dieRoll.toString());
 			// only update when can make a guess
@@ -269,15 +269,9 @@ public class GUI extends JFrame {
 
 					if(player instanceof HumanPlayer && !player.isTurnOver())
 					{
-						if(!board.getCellAt(player.getColumn(), player.getRow()).isDoorway())
-						{						
-							GuessDialog guess = new GuessDialog(false);
-							guess.setVisible(true);
-						}
-						else
-						{
-							JOptionPane.showMessageDialog(null, "You can not make an accusation because you are not in a room.", "Not in a room", JOptionPane.INFORMATION_MESSAGE);
-						}
+
+						GuessDialog guess = new GuessDialog(false);
+						guess.setVisible(true);
 					}
 					else
 					{

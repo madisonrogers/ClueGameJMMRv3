@@ -24,24 +24,25 @@ public class GuessDialog extends JDialog{
 	private Person person;
 	private Weapon weapon;
 	private Buttons buttons;
+	private Solution solution;
 	private boolean suggestion;
 	
 	public Solution getSolution()
 	{
-		String room;
-		String person = this.person.getName();
-		String weapon = this.weapon.getName();
-		
-		if(suggestion)
-		{
-			room = this.room.getName();
-		}
-		else
-		{
-			room = roomGuess.getName();
-		}
-		
-		Solution solution = new Solution(person, room, weapon);
+//		String room;
+//		String person = this.person.getName();
+//		String weapon = this.weapon.getName();
+//		
+//		if(suggestion)
+//		{
+//			room = this.room.getName();
+//		}
+//		else
+//		{
+//			room = roomGuess.getName();
+//		}
+//		
+//		Solution solution = new Solution(person, room, weapon);
 		
 		return solution;
 		
@@ -81,16 +82,23 @@ public class GuessDialog extends JDialog{
 	
 	public class Room extends JPanel
 	{	
+		private JLabel currentRoom;
+		
 		public Room()
 		{
 			setLayout(new GridLayout(1,1));
 			setBorder(new TitledBorder(new EtchedBorder(), "Your Room"));
-			JLabel currentRoom = new JLabel();
+			currentRoom = new JLabel();
 			
 			currentRoom.setText(board.getLegend().get(board.getCellAt(board.getHumanPlayer().getRow(), board.getHumanPlayer().getColumn()).getInitial()));
 		
 			add(currentRoom);
 		}
+
+		public JLabel getCurrentRoom() {
+			return currentRoom;
+		}
+		
 	}
 	
 	public class RoomGuess extends JPanel {
@@ -107,11 +115,19 @@ public class GuessDialog extends JDialog{
 			add(guess);
 			setBorder(new TitledBorder(new EtchedBorder(), "Room"));
 		}
+		
+		public JComboBox<String> getGuess() {
+			return guess;
+		}
 	}
 	
 	public class Person extends JPanel{
 		private JComboBox<String> guess = new JComboBox<String>();
 		private ArrayList<Player> players = board.getPlayers();
+		
+		public JComboBox<String> getGuess() {
+			return guess;
+		}
 
 		public Person() {
 			// TODO Auto-generated constructor stub
@@ -123,11 +139,16 @@ public class GuessDialog extends JDialog{
 			add(guess);
 			setBorder(new TitledBorder(new EtchedBorder(), "Person"));
 		}
+		
 	}
 	
 	public class Weapon extends JPanel {
 		private JComboBox<String> guess = new JComboBox<String>();
 		private ArrayList<String> weapons = board.getWeapons();
+		
+		public JComboBox<String> getGuess() {
+			return guess;
+		}
 
 		public Weapon() {
 			for(String weapon : weapons)
@@ -150,6 +171,7 @@ public class GuessDialog extends JDialog{
 			JButton cancel = new JButton("Cancel");
 			
 			cancel.addActionListener(new CancelButtonListener());
+			submit.addActionListener(new SubmitButtonListener());
 			
 			add(submit);
 			add(cancel);
@@ -165,6 +187,22 @@ public class GuessDialog extends JDialog{
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			
+			String roomStr;
+			String personStr = person.getGuess().getSelectedItem().toString();
+			String weaponStr = weapon.getGuess().getSelectedItem().toString();
+			
+			if(suggestion)
+			{
+				roomStr = room.getCurrentRoom().getText();
+			}
+			else
+			{
+				roomStr = roomGuess.getGuess().getSelectedItem().toString();
+			}
+			
+			solution = new Solution(personStr, roomStr, weaponStr);
+			System.out.println(solution.toString());
+			setVisible(false);
 		}
 		
 	}
