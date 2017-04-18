@@ -200,7 +200,7 @@ import javax.swing.border.TitledBorder;
 				
 				solution = new Solution(personStr, roomStr, weaponStr);
 		
-				if(suggestion)
+				if(suggestion) // player is making a guess
 				{
 //					System.out.println(solution.toString());
 					Card suggestionResult = board.handleSuggestion(0, solution);
@@ -218,16 +218,12 @@ import javax.swing.border.TitledBorder;
 					}
 					else
 					{
+						
 						JOptionPane.showMessageDialog(null, "Your accusation is incorrect.", "Incorrect accusation", JOptionPane.INFORMATION_MESSAGE);
-						setVisible(false);
-						board.setTargets(null);
-						repaint();
-						board.getHumanPlayer().turnOver = true;
+						dispose();
 					}
-				}
-				
+				}	
 			}
-
 		}
 
 		public class CancelButtonListener implements ActionListener

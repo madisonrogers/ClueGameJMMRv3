@@ -14,7 +14,7 @@ public class HumanPlayer extends Player {
 	}
 	
 	public void makeMove(Set<BoardCell> targets){
-		turnOver = true;
+		turnOver = false;
 	}
 
 	@Override
