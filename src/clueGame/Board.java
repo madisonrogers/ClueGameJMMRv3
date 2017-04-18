@@ -26,7 +26,7 @@ public class Board extends JPanel{
 	private static GUI gui;
 
 	private int dieRoll;
-	
+
 	private int numRows;
 	private int numCols;
 	private BoardCell[][] board;
@@ -536,7 +536,6 @@ public class Board extends JPanel{
 		// clears control gui
 		gui.getInfoPanel().updateInfoPanel(dieRoll, suggestion, suggestionResult);
 
-
 		// set the last room the computer player was in 
 		if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway())
 		{
@@ -545,8 +544,10 @@ public class Board extends JPanel{
 
 		calcTargets(activePlayer.getRow(), activePlayer.getColumn(), dieRoll);
 
-		for (BoardCell cell : targets){
-			cell.setHighlight(true);
+		if (activePlayer instanceof HumanPlayer){
+			for (BoardCell cell : targets){
+				cell.setHighlight(true);
+			}
 		}
 		repaint();
 
@@ -560,14 +561,18 @@ public class Board extends JPanel{
 			// if the player is in a room allow them to make a solution
 			if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway() && activePlayer instanceof ComputerPlayer){
 				suggestion = activePlayer.createSuggestion(this.getCellAt(activePlayer.getRow(), activePlayer.getColumn()), playerCards, weaponCards, legend);
-				// TODO: move the suggested player into room
-//				return suggestion; FIXME what do you return?
+
+				// move the suggested player into room
+				for (Player player : players){
+					if (suggestion.person.equals(player.getPlayerName())){
+						player.setLocation(getCellAt(activePlayer.getRow(), activePlayer.getColumn()));
+					}
+				}
 			}
 		}
 		targets.clear();
 
-
-//		if (activePlayerIndex == 0) suggestion = ((HumanPlayer) getHumanPlayer()).getSuggestion();
+		//		if (activePlayerIndex == 0) suggestion = ((HumanPlayer) getHumanPlayer()).getSuggestion();
 
 		gui.getInfoPanel().updateWhoseTurn(players.get(activePlayerIndex).getPlayerName());
 
@@ -653,7 +658,14 @@ public class Board extends JPanel{
 			// bring up suggestion dialog box
 			if (showDialog){
 				GuessDialog guessBox = new GuessDialog(true);
+				
+				for (Player player : players){
+					if ( guessBox.getSolution().person.equals(player.getPlayerName())){
+						player.setLocation(getCellAt(activePlayer.getRow(), activePlayer.getColumn()));
+					}
+				}
 				gui.getInfoPanel().updateInfoPanel(dieRoll, guessBox.getSolution(), handleSuggestion(0, guessBox.getSolution()));
+				repaint();
 			}
 		}
 

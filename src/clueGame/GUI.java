@@ -92,26 +92,6 @@ public class GUI extends JFrame {
 		return infoPanel;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// Put this in here to access board when NextPlayer button is pressed
 	public class ControlGUI extends JPanel {
 		JTextField rollField;
