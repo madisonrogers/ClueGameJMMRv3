@@ -726,6 +726,11 @@ public class Board extends JPanel{
 		targets.clear();
 		return finalTargets;
 	}
+	
+	public void setTargets(Set<BoardCell> targets)
+	{
+		this.targets = targets;
+	}
 
 	public void setConfigFiles(String board, String legend) {
 		boardConfigFile = board;

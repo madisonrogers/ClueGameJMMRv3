@@ -253,7 +253,6 @@ public class GUI extends JFrame {
 
 					if(player instanceof HumanPlayer && !player.isTurnOver())
 					{
-
 						GuessDialog guess = new GuessDialog(false);
 						guess.setVisible(true);
 					}
