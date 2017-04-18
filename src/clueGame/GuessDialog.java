@@ -222,6 +222,7 @@ import javax.swing.border.TitledBorder;
 						JOptionPane.showMessageDialog(null, "Your accusation is incorrect.", "Incorrect accusation", JOptionPane.INFORMATION_MESSAGE);
 						dispose();
 					}
+					
 				}	
 			}
 		}

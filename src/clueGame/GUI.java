@@ -24,6 +24,7 @@ public class GUI extends JFrame {
 	public static final int FRAME_WIDTH = 780;
 	public static final int FRAME_HEIGHT = 800;
 	private static JMenuBar menuBar;
+	private JButton nextButton;
 
 	private int currentPlayerIndex;
 	private int dieRoll;
@@ -127,7 +128,7 @@ public class GUI extends JFrame {
 			turnPanel.add(whoseTurn);
 			turnPanel.add(turnField);
 
-			JButton nextButton = new JButton("Next player");
+			nextButton = new JButton("Next player");
 			nextButton.addActionListener(new NextPlayerButtonListener());
 			JButton accuseButton = new JButton("Make an Accusation");
 			accuseButton.addActionListener(new MakeAccusationButtonListener());
@@ -218,6 +219,7 @@ public class GUI extends JFrame {
 					JOptionPane.showMessageDialog(null, "The current player's turn isn't over!", "Turn not over", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
+					board.updateBoardCells(false);
 					board.runGame(currentPlayerIndex);
 				}
 			}
@@ -234,12 +236,13 @@ public class GUI extends JFrame {
 					if(player instanceof HumanPlayer && !player.isTurnOver())
 					{
 						GuessDialog guess = new GuessDialog(false);
+						player.setTurnOver(true);
 						guess.setVisible(true);
+						nextButton.doClick();
 					}
 					else
 					{
 						JOptionPane.showMessageDialog(null, "It is not your turn!", "Not your turn", JOptionPane.INFORMATION_MESSAGE);
-						return;
 					}
 				}
 			}

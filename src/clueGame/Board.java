@@ -553,7 +553,14 @@ public class Board extends JPanel{
 
 		if (activePlayer.isShouldAccuse() && activePlayer instanceof ComputerPlayer && 
 				legend.get(getCellAt(activePlayer.getRow(), activePlayer.getColumn()).getInitial()).equals(activePlayer.getAccusation().room)) {
-			((ComputerPlayer) activePlayer).makeAccusation(); 
+			Solution accusation = ((ComputerPlayer) activePlayer).makeAccusation();
+			if (solution == accusation){ 
+				// computers accusation is correct
+				JOptionPane.showMessageDialog(null, "The Computers accusation: " +  " is correct!", "You lost!", JOptionPane.INFORMATION_MESSAGE);
+				System.exit(gui.DISPOSE_ON_CLOSE);
+			} else {
+				JOptionPane.showMessageDialog(null, "The Computers accusation: " +  " is wrong!", "They were wrong!", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 		else {
 			activePlayer.makeMove(targets);
@@ -658,7 +665,7 @@ public class Board extends JPanel{
 			// bring up suggestion dialog box
 			if (showDialog){
 				GuessDialog guessBox = new GuessDialog(true);
-				
+
 				for (Player player : players){
 					if ( guessBox.getSolution().person.equals(player.getPlayerName())){
 						player.setLocation(getCellAt(activePlayer.getRow(), activePlayer.getColumn()));
@@ -738,10 +745,15 @@ public class Board extends JPanel{
 		targets.clear();
 		return finalTargets;
 	}
-	
-	public void setTargets(Set<BoardCell> targets)
+
+	public void updateBoardCells(boolean highlight)
 	{
-		this.targets = targets;
+		for (BoardCell[] row : board){
+			for (BoardCell cell : row){
+				cell.setHighlight(highlight);
+			}
+		}
+		repaint();
 	}
 
 	public void setConfigFiles(String board, String legend) {
