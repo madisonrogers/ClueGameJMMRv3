@@ -41,12 +41,8 @@ public class GUI extends JFrame {
 		setJMenuBar(menuBar);
 
 		currentPlayerIndex = -1;
-
+		
 		board = Board.getInstance();
-		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
-		//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
-		board.initialize();
-		board.initializeGameplay();
 
 		detectiveNotes = new DetectiveNotes();
 
@@ -92,41 +88,29 @@ public class GUI extends JFrame {
 		return item;
 	}
 
-	public void runGame(int playerIndex){
-		Card suggestionResult = null;
-		Solution suggestion = null;
-
-		dieRoll = new Random().nextInt(6) + 1;
-
-		infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);
-
-		suggestion = board.runGame(playerIndex, dieRoll);
-		if (playerIndex == 0) suggestion = ((HumanPlayer) board.getHumanPlayer()).getSuggestion();
-
-		infoPanel.updateWhoseTurn(board.getPlayers().get(playerIndex).getPlayerName());
-
-		if (suggestion != null){
-			suggestionResult = board.handleSuggestion(playerIndex, suggestion);
-			if (suggestionResult != null){
-				infoPanel.updateInfoPanel(dieRoll, suggestion, suggestionResult);				
-			} else {
-				infoPanel.updateInfoPanel(dieRoll, suggestion);
-			}
-		} else {
-			infoPanel.updateInfoPanel(dieRoll); 
-		}
-
-		repaint();		
+	public ControlGUI getInfoPanel() {
+		return infoPanel;
 	}
 
-	public static void main(String[] args){
-		GUI gui = new GUI();
-		gui.setVisible(true);
 
-		// Splash screen on startup
-		Player human = board.getHumanPlayer();
-		JOptionPane.showMessageDialog(gui, "You are " + human.getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// Put this in here to access board when NextPlayer button is pressed
 	public class ControlGUI extends JPanel {
@@ -254,7 +238,7 @@ public class GUI extends JFrame {
 					JOptionPane.showMessageDialog(null, "The current player's turn isn't over!", "Turn not over", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					currentPlayerIndex = ++currentPlayerIndex % board.getPlayers().size();
-					runGame(currentPlayerIndex);
+					board.runGame(currentPlayerIndex);
 				}
 			}
 		}

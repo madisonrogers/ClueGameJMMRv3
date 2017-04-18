@@ -23,7 +23,10 @@ public class Board extends JPanel{
 	public static final int MAX_PLAYERS = 6;
 	public static final int MAX_ROOMS = 9;
 
+	private static GUI gui;
 
+	private int dieRoll;
+	
 	private int numRows;
 	private int numCols;
 	private BoardCell[][] board;
@@ -522,8 +525,17 @@ public class Board extends JPanel{
 		return false;
 	}
 
-	public Solution runGame(int activePlayerIndex, int dieRoll){
+	public void runGame(int activePlayerIndex){
 		activePlayer = players.get(activePlayerIndex);
+
+		dieRoll = new Random().nextInt(6) + 1;
+
+		Card suggestionResult = null;
+		Solution suggestion = null;
+
+		// clears control gui
+		gui.getInfoPanel().updateInfoPanel(dieRoll, suggestion, suggestionResult);
+
 
 		// set the last room the computer player was in 
 		if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway())
@@ -547,14 +559,30 @@ public class Board extends JPanel{
 
 			// if the player is in a room allow them to make a solution
 			if (getCellAt(activePlayer.getRow(), activePlayer.getColumn()).isDoorway() && activePlayer instanceof ComputerPlayer){
-				Solution suggestion = activePlayer.createSuggestion(this.getCellAt(activePlayer.getRow(), activePlayer.getColumn()), playerCards, weaponCards, legend);
+				suggestion = activePlayer.createSuggestion(this.getCellAt(activePlayer.getRow(), activePlayer.getColumn()), playerCards, weaponCards, legend);
 				// TODO: move the suggested player into room
-				return suggestion;
+//				return suggestion; FIXME what do you return?
 			}
 		}
 		targets.clear();
 
-		return null;
+
+//		if (activePlayerIndex == 0) suggestion = ((HumanPlayer) getHumanPlayer()).getSuggestion();
+
+		gui.getInfoPanel().updateWhoseTurn(players.get(activePlayerIndex).getPlayerName());
+
+		if (suggestion != null){
+			suggestionResult = handleSuggestion(activePlayerIndex, suggestion);
+			if (suggestionResult != null){
+				gui.getInfoPanel().updateInfoPanel(dieRoll, suggestion, suggestionResult);				
+			} else {
+				gui.getInfoPanel().updateInfoPanel(dieRoll, suggestion);
+			}
+		} else {
+			gui.getInfoPanel().updateInfoPanel(dieRoll); 
+		}
+
+		repaint();
 	}
 
 	public void paintComponent(Graphics g){
@@ -623,7 +651,10 @@ public class Board extends JPanel{
 				repaint();
 			}
 			// bring up suggestion dialog box
-			if (showDialog)	activePlayer.createSuggestion(null, null, null, null);
+			if (showDialog){
+				GuessDialog guessBox = new GuessDialog(true);
+				gui.getInfoPanel().updateInfoPanel(dieRoll, guessBox.getSolution(), handleSuggestion(0, guessBox.getSolution()));
+			}
 		}
 
 		@Override
@@ -756,5 +787,20 @@ public class Board extends JPanel{
 
 	public ArrayList<Card> getWeaponCards() {
 		return weaponCards;
+	}
+
+	public static void main(String[] args){
+
+		Board board = Board.getInstance();
+		board.setConfigFiles("ClueCSV.csv", "Legend.txt", "ThreePlayers.txt", "Weapons.txt");
+		//		board.setConfigFiles("CR_ClueLayout.csv", "CR_ClueLegend.txt", "ThreePlayers.txt", "Weapons.txt");
+		board.initialize();
+		board.initializeGameplay();
+
+		gui = new GUI();
+		gui.setVisible(true);
+		// Splash screen on startup
+		Player human = board.getHumanPlayer();
+		JOptionPane.showMessageDialog(gui, "You are " + human.getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
