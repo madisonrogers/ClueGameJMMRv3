@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -198,11 +199,33 @@ import javax.swing.border.TitledBorder;
 				}
 				
 				solution = new Solution(personStr, roomStr, weaponStr);
-				System.out.println(solution.toString());
-				Card suggestionResult = board.handleSuggestion(0, solution);
-//				infoPanel.updateInfoPanel(-1, solution, suggestionResult);
-				setVisible(false);
-				repaint();
+		
+				if(suggestion)
+				{
+//					System.out.println(solution.toString());
+					Card suggestionResult = board.handleSuggestion(0, solution);
+//					infoPanel.updateInfoPanel(-1, solution, suggestionResult);
+					setVisible(false);
+					repaint();
+				}
+				else // The player is accusing
+				{
+					ArrayList<String> solutionList = board.getSolution();
+					if(solutionList.get(0).equals(solution.person) && solutionList.get(1).equals(solution.room) && solutionList.get(2).equals(solution.weapon))
+					{
+						JOptionPane.showMessageDialog(null, "Your accusation is correct, you win!", "Winner!", JOptionPane.INFORMATION_MESSAGE);
+						System.exit(DISPOSE_ON_CLOSE);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Your accusation is incorrect.", "Incorrect accusation", JOptionPane.INFORMATION_MESSAGE);
+						setVisible(false);
+						board.setTargets(null);
+						repaint();
+						board.getHumanPlayer().turnOver = true;
+					}
+				}
+				
 			}
 
 		}
